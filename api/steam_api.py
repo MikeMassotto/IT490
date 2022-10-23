@@ -1,4 +1,4 @@
-from turtle import back
+import grequests
 import requests
 import util
 
@@ -97,15 +97,17 @@ def request_app_details( appid ):
     
     success = data["success"]
     if( success == False ):
-        return None
-
-    if data["type"] != "game":
-        return None
-
-    if "genres" not in data:
-        return None
+        return {}
 
     data = data["data"]
+
+    if data["type"] != "game":
+        return {}
+
+    if "genres" not in data:
+        return {}
+
+    
     type = data["type"]
     name = data["name"]
     steam_appid = appid
@@ -138,6 +140,71 @@ def request_app_details( appid ):
         "mature" : mature
     }
     return data
+
+async def request_app_details_multi(app_list):
+    URLs = []
+    for x in range(len(app_list)):
+        URLs.append("https://store.steampowered.com/api/appdetails?appids=" + str( app_list[x] ))
+
+    rs = (grequests.get(u) for u in URLs)
+
+    detail_list = grequests.map(rs)
+
+    app_details = {}
+
+    for details in detail_list:
+        #print(details.text)
+
+        r_json = details.json()
+        data = r_json[next(iter(r_json))]
+        
+        success = data["success"]
+        if( success == False ):
+            return {}
+
+        data = data["data"]
+
+        if data["type"] != "game":
+            return {}
+
+        if "genres" not in data:
+            return {}
+
+        
+        type = data["type"]
+        name = data["name"]
+        steam_appid = data["steam_appid"]
+        detailed_description = data["detailed_description"]
+        short_description = data["short_description"]
+        #supported_languages = data["supported_languages"].split(', ') # Split supported languages into a list
+        header_image = data["header_image"]
+        website = data["website"]
+        #metacritic = data["metacritic"]
+        genres = util.get_values_from_json_object_array(data["genres"], "description") # Remove all unimportant information
+        release_date = data["release_date"]["date"]
+        background = data["background_raw"]
+        mature = True if len(data["content_descriptors"]["ids"]) > 0 else False # Expression: Check if content_descriptors ids are present, if they are then its mature. I think...
+
+        print(name)
+
+        data = {
+            "type" : type,
+            "name" : name,
+            "steam_appid" : steam_appid,
+            "detailed_description" : detailed_description,
+            "short_description" : short_description,
+        # "supported_languages" : supported_languages,
+            "header_image" : header_image,
+            "website" : website,
+        # "metacritic" : metacritic,
+            "genres" : genres,
+            "release_date" : release_date,
+            "background" : background,
+            "mature" : mature
+        }
+
+        app_details[str(steam_appid)] = data
+    return app_details
 
 def request_current_top_100():
     """
