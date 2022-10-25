@@ -13,8 +13,8 @@ class Engine {
         this.ctx = this.cnv.getContext('2d')
         document.body.style.padding = 0;
         document.body.style.margin = 0;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = 1920;
+        canvas.height = 1080;
     }
 
     init() 

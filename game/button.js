@@ -3,17 +3,17 @@ function new_button()
     let button = new Entity;
     button.think = button_think;
     button.sprite = new Image();
-    button.sprite.src = "test.png"
+    button.sprite.src = "button.png"
+    button.scale.x = 0.5;
+    button.scale.y = 0.5;
+    button.label.text = "label";
+    button.label.offset.x = ( button.sprite.width * button.scale.x ) / 2;
+    button.label.offset.y = ( button.sprite.height * button.scale.y ) / 2;
 
-    button.position.x = 1200;
-    button.position.y = 500;
     return button;
 }
 
-function button_think( self ){
-    self.position.x += Math.floor(Math.random() * 11) - 5;
-    self.position.y += Math.floor(Math.random() * 11) - 5;
-    
-    self.scale.x = .2;//Math.floor(Math.random() * 100) / 100;
-    self.scale.y = .2;//Math.floor(Math.random() * 100) / 100;
+function button_think( self )
+{
+
 }

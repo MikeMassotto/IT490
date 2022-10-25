@@ -10,7 +10,7 @@ window.onload = function()
         ent = new_button();
         ent.tag = i.toString();
     }
-    engine.ctx.fillStyle = '#1bafdb';
+    
 }
 
 engine.init = function()
@@ -21,14 +21,16 @@ engine.init = function()
 engine.update = function()
 {
     entity_manager.think()
+    entity_manager.update()
 }
 
 engine.render = function()
 {
     
     engine.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //engine.ctx.fillRect(0, 0, engine.cnv.width, engine.cnv.height);
-    //draw_sprite(button.sprite, 220, 270, 10, 10, 1, 1);
+    engine.ctx.fillStyle = '#1bafdb';
+    engine.ctx.fillRect(0, 0, engine.cnv.width, engine.cnv.height);
+    
     entity_manager.draw();
 }
 

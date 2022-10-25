@@ -2,12 +2,14 @@
 class Entity {
     constructor()
     {
-        this.position = {x : 0, y : 0};
+        this.position = new Vector2d;
         this.action = null;
         this.think = null;
         this.sprite = null;
-        this.scale = {x : 1, y : 1};
+        this.scale = new Vector2d;
+        this.hitbox = new Rect;
         this.tag = '';
+        this.label = new Label;
 
         entity_manager.entity_list.push(this);
         entity_manager.entity_count ++;
@@ -67,6 +69,12 @@ class Entity_Manager {
                 ent.sprite.width * ent.scale.x, 
                 ent.sprite.height * ent.scale.y
             )
+
+            engine.ctx.font = ent.label.font;
+            engine.ctx.fillStyle = ent.label.color;
+            engine.ctx.textAlign = "center";
+            engine.ctx.textBaseline = "middle";
+            engine.ctx.fillText( ent.label.text, ent.position.x + ent.label.offset.x,  ent.position.y + ent.label.offset.y );
         }
         
     }
