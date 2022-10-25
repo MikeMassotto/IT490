@@ -5,16 +5,22 @@ class Engine {
         this.ctx = null;
         this.cnv = null;
         this.loop = null;
+        this.mouse = new Mouse;
     }
 
     canvas_init() 
     {
         this.cnv = document.getElementById('canvas');
         this.ctx = this.cnv.getContext('2d')
+
+        this.cnv.addEventListener('click', function(e) {
+            mouse_click(canvas, e)
+        })
+
         document.body.style.padding = 0;
         document.body.style.margin = 0;
-        canvas.width = 1920;
-        canvas.height = 1080;
+        canvas.width = 1280;
+        canvas.height = 720;
     }
 
     init() 

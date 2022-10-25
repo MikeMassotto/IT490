@@ -35,3 +35,16 @@ class Label {
         this.color = "#ffffff";
     }
 }
+
+class Mouse {
+    constructor()
+    {
+        this.position = new Vector2d;
+        this.event = null;
+    }
+
+    update()
+    {
+        this.event = null;
+    }
+}

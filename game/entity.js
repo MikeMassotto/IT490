@@ -8,6 +8,7 @@ class Entity {
         this.sprite = null;
         this.scale = new Vector2d;
         this.hitbox = new Rect;
+
         this.tag = '';
         this.label = new Label;
 
@@ -23,7 +24,26 @@ class Entity {
 
     entity_update()
     {
+        this.hitbox.x = this.position.x;
+        this.hitbox.y = this.position.y;
+
         if(this.update != null) this.update();
+    }
+
+    entity_scale( scale )
+    {
+        this.scale = scale;
+        this.hitbox.w = this.sprite.width * this.scale.x;
+        this.hitbox.h = this.sprite.height * this.scale.y;
+
+        
+        this.label.offset.x = ( this.sprite.width * this.scale.x ) / 2;
+        this.label.offset.y = ( this.sprite.height * this.scale.y ) / 2;
+
+        if( this.label.text == "Rust"){
+            correct = true;
+        }
+
     }
 }
 
@@ -50,6 +70,8 @@ class Entity_Manager {
 
     clear()
     {
+        entity_manager.entity_list = [];
+        entity_manager.entity_count = 0;
 
     }
 
@@ -58,23 +80,29 @@ class Entity_Manager {
         for( let i = 0; i < this.entity_count; i++){
             let ent = this.entity_list[i];
 
-            engine.ctx.drawImage( 
-                ent.sprite, 
-                0, 
-                0, 
-                ent.sprite.width, 
-                ent.sprite.height, 
-                ent.position.x, 
-                ent.position.y, 
-                ent.sprite.width * ent.scale.x, 
-                ent.sprite.height * ent.scale.y
-            )
-
+            if(  ent.sprite )
+            {
+                engine.ctx.drawImage( 
+                    ent.sprite, 
+                    0, 
+                    0, 
+                    ent.sprite.width, 
+                    ent.sprite.height, 
+                    ent.position.x, 
+                    ent.position.y, 
+                    ent.sprite.width * ent.scale.x, 
+                    ent.sprite.height * ent.scale.y
+                )
+            }
             engine.ctx.font = ent.label.font;
             engine.ctx.fillStyle = ent.label.color;
             engine.ctx.textAlign = "center";
             engine.ctx.textBaseline = "middle";
             engine.ctx.fillText( ent.label.text, ent.position.x + ent.label.offset.x,  ent.position.y + ent.label.offset.y );
+
+           // engine.ctx.move(ent.hitbox.x, ent.hitbox.y);
+
+
         }
         
     }
