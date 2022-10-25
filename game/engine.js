@@ -48,15 +48,5 @@ class Engine {
 
     }
 
-    draw_sprite( sprite, width, height, x, y, scale_w, scale_h ) {
-        ctx.drawImage( sprite, 0, 0, width, height, x, y, width * scale_w, height * scale_h )
 
-        
-        let ball = {
-            x_pos : 0,
-            y_pos : 0,
-            size : 0,
-            color : "#ffffff",
-        }
-    }
 }

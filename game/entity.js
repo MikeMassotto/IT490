@@ -5,6 +5,8 @@ class Entity {
         this.position = {x : 0, y : 0};
         this.action = null;
         this.think = null;
+        this.sprite = null;
+        this.scale = {x : 1, y : 1};
         this.tag = '';
 
         entity_manager.entity_list.push(this);
@@ -47,6 +49,26 @@ class Entity_Manager {
     clear()
     {
 
+    }
+
+    draw()
+    {
+        for( let i = 0; i < this.entity_count; i++){
+            let ent = this.entity_list[i];
+
+            engine.ctx.drawImage( 
+                ent.sprite, 
+                0, 
+                0, 
+                ent.sprite.width, 
+                ent.sprite.height, 
+                ent.position.x, 
+                ent.position.y, 
+                ent.sprite.width * ent.scale.x, 
+                ent.sprite.height * ent.scale.y
+            )
+        }
+        
     }
 
 }
