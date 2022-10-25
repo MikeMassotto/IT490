@@ -1,23 +1,30 @@
-let gameloop = new GameLoop();
-
+let engine = new Engine();
+let button = new_button();
+let button2 = new_button();
 
 
 window.onload = function()
 {
-    gameloop.start();
+    engine.start();
+    for( let i = 0; i < 5; i++ )
+    {
+        ent = new_button();
+        ent.tag = i.toString();
+    }
 }
 
-gameloop.init = function()
+engine.init = function()
 {
-
+    console.log("init");
 }
 
-gameloop.update = function()
+engine.update = function()
 {
-
+    //button.think();
+    entity_manager.think()
 }
 
-gameloop.render = function()
+engine.render = function()
 {
     
 }

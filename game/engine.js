@@ -1,4 +1,4 @@
-class GameLoop {
+class Engine {
     constructor() 
     {
         this.fps = 60;
@@ -19,12 +19,12 @@ class GameLoop {
 
     init() 
     {
-
+        
     }
 
     update() 
     {
-
+        
     }
 
     render()
@@ -34,14 +34,14 @@ class GameLoop {
 
     start()
     {
-        console.log("init");
+        console.log("start");
         this.canvas_init();
         this.init();
 
         this.loop = setInterval(
             () => {
-            update();
-            render();
+            this.update();
+            this.render();
             },
             1000/this.fps
         );
