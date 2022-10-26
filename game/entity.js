@@ -8,6 +8,7 @@ class Entity {
         this.sprite = null;
         this.scale = new Vector2d;
         this.hitbox = new Rect;
+        this.nums = new Vector3d;
 
         this.tag = '';
         this.label = new Label;
