@@ -35,6 +35,13 @@ function new_user($username, $password){
     $request['type'] = 'new_user';
     $request['username'] = $username;
 	$request['password'] = password_hash($password, PASSWORD_DEFAULT);
+    $response = $client->send_request($request);
+
+	if(true){
+		header("Location: index.html");
+	} else {
+		return "Registration failed.";
+	}
 }
 
 if (!isset($_POST))
@@ -49,9 +56,12 @@ $response = "unsupported request type, politely FUCK OFF";
 switch ($request["type"])
 {
 	case "login":
-     		$response = login($request["uname"], $request["pword"]);
+     		$response = login($request["uname"], $request["password"]);
 
 	break;
+
+	case "new_user":
+		$reponse = new_user($request["uname"], $request["password"]);
 }
 echo json_encode($response);
 exit(0);
