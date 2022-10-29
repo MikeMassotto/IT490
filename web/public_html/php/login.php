@@ -6,8 +6,9 @@ require_once('../../rabbitMQLib.inc');
 
 //login();
 
+//Login
 function login($username, $password){
- $client = new rabbitMQClient("../testRabbitMQ.ini","testServer");
+	$client = new rabbitMQClient("../testRabbitMQ.ini","testServer");
     $request = array();
     $request['type'] ='login';
     $request['username'] = $username;
@@ -25,6 +26,15 @@ function login($username, $password){
 		}
 	}
 	return "Username or password does not exist.";
+}
+
+//New User
+function new_user($username, $password){
+	$client = new rabbitMQClient("../testRabbitMQ.ini","testServer");
+	$request = array();
+    $request['type'] = 'new_user';
+    $request['username'] = $username;
+	$request['password'] = password_hash($password, PASSWORD_DEFAULT);
 }
 
 if (!isset($_POST))

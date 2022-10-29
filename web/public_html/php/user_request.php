@@ -6,6 +6,9 @@
 
    switch ($request["type"]){
 
+      case "all":
+         break;
+
       case "profile_name":
          echo "bob";
          break;

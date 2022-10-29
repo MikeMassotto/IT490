@@ -1,0 +1,36 @@
+<html>
+<script>
+
+function HandleLoginResponse(response)
+{
+//	var text = JSON.parse(response);
+	document.getElementById("textResponse").innerHTML = "<br>"+response+"<p>";	
+//	document.getElementById("textResponse").innerHTML = "response: "+text+"<p>";
+}
+
+function sendRegistrationRequest()
+{
+
+}
+
+</script>
+
+<body>
+
+<h1>registration page</h1>
+
+<!--Registration Fields and Button-->
+<form action="javascript:SendLoginRequest()">
+	<label for="username">Username:</label><br>
+	<input type="text" id="username" name="username"><br>
+	<label for="password">Password:</label><br>
+	<input type="password" id="password" name="password"><br><br>
+	<input type="submit" value="Register">
+</form>
+
+<div id="textResponse">
+awaiting response
+</div>
+
+</body>
+</html>
