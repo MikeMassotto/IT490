@@ -11,7 +11,7 @@ function HandleLoginResponse(response)
 function SendLoginRequest()
 {
 	username = document.getElementById("username").value;
-	password = document.getElementById("password").value;	
+	password = document.getElementById("password").value;
 
 	var request = new XMLHttpRequest();
 	request.open("POST","/../login.php",true);
@@ -46,8 +46,11 @@ function SendLogoutRequest()
 }
 </script>
 
-<h1>login page</h1>
 <body>
+
+<h1>login page</h1>
+
+<!--Login Fields and Button-->
 <form action="javascript:SendLoginRequest()">
 	<label for="username">Username:</label><br>
 	<input type="text" id="username" name="username"><br>
@@ -55,16 +58,18 @@ function SendLogoutRequest()
 	<input type="password" id="password" name="password"><br><br>
 	<input type="submit" value="Login">
 </form>
+
+<!--Logout Button-->
 <form action="javascript:SendLogoutRequest()">
 	<input type="submit" value="Logout">
 </form>
 
+<!--Create Account Link-->
+<p>New here? <a href="register.html">Create an account</a>.</p>
+
 <div id="textResponse">
 awaiting response
 </div>
-<script>
-//SendLoginRequest();
-//SendLogoutRequest();
-</script>
+
 </body>
 </html>
