@@ -39,3 +39,10 @@ def regex_extract_all(regex, str):
     """
     matches = re.findall(regex, str)
     return [*set(matches)] # Remove duplicates if any
+
+
+# Copied from https://www.geeksforgeeks.org/break-list-chunks-size-n-python/
+def divide_chunks(l, n):
+    # looping till length l
+    for i in range(0, len(l), n):
+        yield l[i:i + n]

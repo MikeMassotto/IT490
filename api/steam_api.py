@@ -91,7 +91,7 @@ def request_app_details( appid ):
     """
     URL = "https://store.steampowered.com/api/appdetails?appids=" + str( appid ) # Example appid: 252950 ( Rocket League )
     r = requests.get( URL )
-
+    
     r_json = r.json()
     data = r_json[appid]
     
