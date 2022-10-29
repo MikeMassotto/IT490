@@ -28,6 +28,21 @@ function login($username, $password){
 	return "Username or password does not exist.";
 }
 
+//Logout
+function logout(){
+    if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
+  }
+  
+  session_destroy();
+
+  return "Session destroyed";
+}
+
 //New User
 function new_user($username, $password){
 	$client = new rabbitMQClient("../testRabbitMQ.ini","testServer");
@@ -56,12 +71,20 @@ $response = "unsupported request type, politely FUCK OFF";
 switch ($request["type"])
 {
 	case "login":
-     		$response = login($request["uname"], $request["password"]);
+     	$response = login($request["uname"], $request["password"]);
 
-	break;
+		break;
 
+	case "logout":
+		$response = logout();
+
+		break;
+	
 	case "new_user":
 		$reponse = new_user($request["uname"], $request["password"]);
+
+		break;
+
 }
 echo json_encode($response);
 exit(0);
