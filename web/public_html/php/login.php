@@ -11,7 +11,7 @@ function login($username, $password){
     $request = array();
     $request['type'] ='login';
     $request['username'] = $username;
-    $request['password'] = $password;
+    $request['password'] = password_hash($password, PASSWORD_DEFAULT);
     $request['message'] = "t";
     $response = $client->send_request($request);
 	if($response){
