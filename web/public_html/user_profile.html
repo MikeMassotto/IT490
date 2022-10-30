@@ -3,7 +3,7 @@
 
 <script>
     
-    //Handles all user requests and passes them as a string to user_request.php
+    //Handles all user requests and passes them as a string type to user_request.php
     function get_user_request()
     {
         var request = new XMLHttpRequest();
@@ -15,7 +15,6 @@
 
             if ((this.readyState == 4)&&(this.status == 200))
             {
-                console.log("inside readyState");
                 replace_html("username", this.responseText);
             }
         }
@@ -28,11 +27,21 @@
         document.getElementById(id).innerHTML = replace_text;
     }
 
+    //Replaces HTML Text with a list
+    function list_html(id)
+    {
+
+        let test_friends = ["Star", "Angie", "Brush"]
+        
+
+    }
+
 </script>
 
 <script>
 
     get_user_request()
+    list_html("friends-list")
 
 </script>
 
@@ -61,8 +70,12 @@
         <h1><span id="username">username</span>'s Profile</h1>
 
         <h2>Achievements</h2>
+
+        <ul id="achievements"></ul>
     
         <h2>Friends</h2>
+
+        <ul id="friends-list"></ul>
 
     </main>
 
