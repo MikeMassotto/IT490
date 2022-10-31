@@ -2,9 +2,10 @@
 <html lang="en">
 
 <script>
+    //Functions
     
     //Handles all user requests and passes them as a string type to user_request.php
-    function get_user_request()
+    function get_user_data(data_type)
     {
         var request = new XMLHttpRequest();
         request.open("POST","php/user_request.php",true);
@@ -25,7 +26,7 @@
                 return this.responseText;
             }
         }
-        request.send("type=all&userid=",userid);
+        request.send("type=",data_type,"&userid=",userid);
     }
 
     //Replaces HTML Text with text sent in replace_text parameter
@@ -34,19 +35,17 @@
         document.getElementById(id).innerHTML = replace_text;
     }
 
-    //Fills an HTML list with elements requested from db
-    function list_html(id)
+    //Populate a list marked an id 
+    function list_html(id, data_array)
     {
-        
+        var list = document.getElementById(id);
+        for (var i = 0; i < data_array.length; i++)
+        {
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(data_array[i]));
+            list.appendChild(li);
+        }
     }
-
-</script>
-
-<script>
-
-    var user_data = get_user_request()
-    console.log(user_data)
-    list_html("friends-list")
 
 </script>
 
@@ -80,7 +79,7 @@
     
         <h2>Friends</h2>
 
-        <ul id="friends-list"></ul>
+        <ul id="friends_list"></ul>
 
     </main>
 
@@ -91,3 +90,16 @@
 </body>
 
 </html>
+
+<script>
+    //Running Script
+
+    var profile_info = get_user_data("all")
+    console.log(profile_info)
+
+    var friends = get_user_data("friends")
+    console.log(friends)
+
+    list_html("friends_list", friends)
+
+</script>
