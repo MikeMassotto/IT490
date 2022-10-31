@@ -22,6 +22,7 @@
             if ((this.readyState == 4)&&(this.status == 200))
             {
                 replace_html("username", this.responseText);
+                return this.responseText;
             }
         }
         request.send("type=all&userid=",userid);
@@ -33,7 +34,7 @@
         document.getElementById(id).innerHTML = replace_text;
     }
 
-    //Replaces HTML Text with a list
+    //Fills an HTML list with elements requested from db
     function list_html(id)
     {
 
@@ -43,7 +44,8 @@
 
 <script>
 
-    get_user_request()
+    var user_data = get_user_request()
+    console.log(user_data)
     list_html("friends-list")
 
 </script>

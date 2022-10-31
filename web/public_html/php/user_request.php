@@ -28,10 +28,11 @@
    switch ($request["type"]){
 
       case "all":
-         get_all_user_data($request["userid"]);
+         $response = get_all_user_data($request["userid"]);
          break;
    }
 
+   echo json_encode($response);
    exit(0);
 
 ?>
