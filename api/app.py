@@ -21,6 +21,7 @@ async def main():
     for id in appids:
         apps[id] = steam_api.request_app_details( id )
         channel.basic_publish(exchange=config.EXCHANGE, routing_key=config.QUEUE, body=json.dumps(apps[id]))
+        break
     #apps = await steam_api.request_app_details_multi( appids )
 
     with open('result.json', 'w') as fp:

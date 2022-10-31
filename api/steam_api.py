@@ -118,9 +118,10 @@ def request_app_details( appid ):
     website = data["website"]
     #metacritic = data["metacritic"]
     genres = util.get_values_from_json_object_array(data["genres"], "description") # Remove all unimportant information
+    categories = util.get_values_from_json_object_array(data["categories"], "description")
     release_date = data["release_date"]["date"]
     background = data["background_raw"]
-    mature = True if len(data["content_descriptors"]["ids"]) > 0 else False # Expression: Check if content_descriptors ids are present, if they are then its mature. I think...
+    mature = 1 if len(data["content_descriptors"]["ids"]) > 0 else 0 # Expression: Check if content_descriptors ids are present, if they are then its mature. I think...
 
     #print(name)
 
@@ -135,6 +136,7 @@ def request_app_details( appid ):
         "website" : website,
        # "metacritic" : metacritic,
         "genres" : genres,
+        "categories" : categories,
         "release_date" : release_date,
         "background" : background,
         "mature" : mature
