@@ -10,6 +10,12 @@
         request.open("POST","php/user_request.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
+        //This bullshit is so we can concat the userid to the request
+        const queryString = window.location.search; 
+        const urlParams = new URLSearchParams(queryString);
+        const userid = urlParams.get('userid')
+        console.log(userid);
+
         request.onreadystatechange = function ()
         {
 
@@ -18,7 +24,7 @@
                 replace_html("username", this.responseText);
             }
         }
-        request.send("type=all&userid=4059");
+        request.send("type=all&userid=",userid);
     }
 
     //Replaces HTML Text with text sent in replace_text parameter
@@ -30,8 +36,6 @@
     //Replaces HTML Text with a list
     function list_html(id)
     {
-
-        let test_friends = ["Star", "Angie", "Bush"]
 
     }
 
