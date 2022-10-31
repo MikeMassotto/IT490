@@ -1,11 +1,18 @@
 class UIText {
-    
+    constructor()
+    {
+        this.text = null;
+        this.font = "24px serif";
+        this.offset = new Vector2d();
+        this.color = "#ffffff";
+    }
 }
 
 class UIButton {
     constructor()
     {
         this.on_press = null;
+        this.label = new UIText();
     }
 }
 
