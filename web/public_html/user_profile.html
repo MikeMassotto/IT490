@@ -35,7 +35,7 @@
         document.getElementById(id).innerHTML = replace_text;
     }
 
-    //Populate a list marked an id 
+    //Populate a list marked by an id
     function list_html(id, data_array)
     {
         var list = document.getElementById(id);
@@ -100,6 +100,10 @@
     var friends = get_user_data("friends")
     console.log(friends)
 
+    var achievements = get_user_data("achievements")
+    console.log(achievements)
+
     list_html("friends_list", friends)
+    list_html("achievements", achievements)
 
 </script>
