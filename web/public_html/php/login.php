@@ -60,7 +60,6 @@ function new_user($username, $password){
 }
 
 //Handles login requests
-
 if (!isset($_POST))
 {
 	$msg = "NO POST MESSAGE SET, POLITELY FUCK OFF";
