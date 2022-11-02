@@ -240,4 +240,5 @@ def request_current_top_100():
     r = requests.get(endpoint, headers=header)
     regex = '(?<=steam\/apps\/)(\d{1,8})(?=\/\$\{FILENAME\}\?)'
     appids = util.regex_extract_all(regex, str(r.text.encode('ascii', 'ignore')))
+    print("Found " + str(len(appids)) + " appids")
     return appids
