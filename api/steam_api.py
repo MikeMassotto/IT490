@@ -1,5 +1,7 @@
 import grequests
 import requests
+import json
+
 import util
 
 def request_app_list_all():
@@ -91,8 +93,18 @@ def request_app_details( appid ):
     """
     URL = "https://store.steampowered.com/api/appdetails?appids=" + str( appid ) # Example appid: 252950 ( Rocket League )
     r = requests.get( URL )
-    
+
+    if r.text == "null":
+        return "rate_limited"
+
     r_json = r.json()
+
+    #remove all apostrophes from r_json
+    r_json = json.loads(json.dumps(r_json).replace("'", ""))
+
+    if r_json is None:
+        return {}
+
     data = r_json[appid]
     
     success = data["success"]
@@ -105,6 +117,9 @@ def request_app_details( appid ):
         return {}
 
     if "genres" not in data:
+        return {}
+    
+    if "categories" not in data:
         return {}
 
     
