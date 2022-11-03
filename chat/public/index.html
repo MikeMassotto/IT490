@@ -6,8 +6,7 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-        <!--This HTML works!-->
-
+        <!--CREATE JOIN SCREEN-->
         <div class="chatapp">
             <div class="screen join-screen active">
                 <div class="join">
@@ -15,6 +14,12 @@
                     <div class="join-input">
                         <label>Enter Username</label>
                         <input type="text" id="username">
+			<label>Select Room</label>
+			<select>
+                            <option value="null"></option>
+                            <option value="Lets Go!">Let's Go!</option>
+                            <option value="Meyham">Meyham</option>
+                        </select>
                     </div>
                     <div class="join-input">
                         <button id="join-user">Join</button>
@@ -22,6 +27,8 @@
                     
                 </div>
             </div>
+
+	    <!--DISPALY CHAT SCREEN-->
             <div class="screen chat-screen">
 
                <div class="header">
@@ -48,6 +55,8 @@
                        </div>
                    </div>-->
                </div> 
+	    
+	       <!--MESSAGE INPUT-->
                <div class="textBox">
                    <input type="text" id="msg-enter">
                    <button id="send-msg">Send</button>
