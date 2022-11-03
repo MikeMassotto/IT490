@@ -54,7 +54,7 @@
       }
    }
 
-   function update_settings($privacy)
+   function update_settings($profile_privacy, $friend_privacy, $achievement_privacy)
    {
       $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
       
@@ -62,7 +62,7 @@
       $request = array();
       $request['type'] = "user_update_profile_privacy";
       $request['user_id'] = $_SESSION['userid'];
-      $request['public'] = true_false_to_1_0($privacy[0]);
+      $request['public'] = true_false_to_1_0($profile_privacy);
       $response = $client ->send_request($request);
       echo json_encode($response);
 
@@ -70,7 +70,7 @@
       $request = array();
       $request['type'] = "user_update_friends_public";
       $request['user_id'] = $_SESSION['userid'];
-      $request['public'] = true_false_to_1_0($privacy[1]);
+      $request['public'] = true_false_to_1_0($friend_privacy);
       $response = $client ->send_request($request);
       echo json_encode($response);
 
@@ -78,7 +78,7 @@
       $request = array();
       $request['type'] = "user_update_achievements_public";
       $request['user_id'] = $_SESSION['userid'];
-      $request['public'] = true_false_to_1_0($privacy[2]);
+      $request['public'] = true_false_to_1_0($achievement_privacy);
       $response = $client ->send_request($request);
       echo json_encode($response);
 
@@ -99,7 +99,7 @@
          break;
 
       case "settings":
-         $response = update_settings($request["privacy"]);
+         $response = update_settings($request["profile_privacy"], $request["friend_privacy"], $request["achievement_privacy"]);
          break;
    }
 

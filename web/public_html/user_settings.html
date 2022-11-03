@@ -8,13 +8,10 @@
         var request = new XMLHttpRequest();
         request.open("POST","/php/user_settings.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-        
-        const setting =
-        [
-            document.getElementbyID("priv_profile").checked,
-            document.getElementbyID("priv_friends").checked,
-            document.getElementByID("priv_achi").checked
-        ];
+
+            $priv_profile = document.getElementbyID("priv_profile").checked;
+            $priv_friends = document.getElementbyID("priv_friends").checked;
+            $priv_achi = document.getElementByID("priv_achi").checked;
 
         request.onreadystatechange= function ()
         {
@@ -24,7 +21,7 @@
                 HandleLoginResponse(this.responseText);
             }		
         }
-        request.send("type=settings&privacy="+setting);
+        request.send("type=settings&priv_profile="+priv_profile+"&priv_friends="+priv_friends+"&priv_achi="+priv_achi);
     }
 
 </script>
