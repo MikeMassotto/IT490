@@ -13,7 +13,7 @@ function new_timer()
 
 function timer_think( self )
 {
-    console.log(self.sprite)
+    //console.log(self.sprite)
     if( self.nums.y == 60)
     {
         self.nums.x--;

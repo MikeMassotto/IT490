@@ -22,6 +22,10 @@ engine.update = function()
 
     // Update mouse last!
     engine.mouse.update();
+
+    if(engine.mouse.event){
+        send_update();
+    }
 }
 
 engine.render = function()
@@ -117,4 +121,32 @@ function start_quiz()
     l3.label.text =  "the environment, other survivors. Do whatever it takes to last another night.";
     l3.position.x = 800;
     l3.position.y = 460;
+
+    console.log("network update");
+    
+    var request = new XMLHttpRequest();
+    request.open("POST","network/post.php",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+	request.send("type=login&text=test");
+
+	var request_t = new XMLHttpRequest();
+	request_t.open("POST","network/request.php",true);
+	request_t.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+	request_t.onreadystatechange= function ()
+	{
+
+		if ((this.readyState == 4)&&(this.status == 200))
+		{
+			console.log(this.responseText);
+		}		
+	}
+	request_t.send("type=get_all_steam_games");
+}
+
+function send_update()
+{
+   
+
 }
