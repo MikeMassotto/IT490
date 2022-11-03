@@ -26,4 +26,10 @@ io.on("connection", function(socket){
 
 server.listen(5000);
 
-
+/*
+Creating a Chat App .
+Source: Create Real-time Chat App using HTML, CSS, JavaScript, NodeJS & Socket.io
+Source Code: https://www.youtube.com/watch?v=kOJEWNPYBUo 
+Author: Codingflag
+retrive on 10/2/2022
+*/
