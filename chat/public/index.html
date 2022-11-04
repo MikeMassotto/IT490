@@ -14,11 +14,14 @@
                     <div class="join-input">
                         <label>Enter Username</label>
                         <input type="text" id="username">
+			
 			<label>Select Room</label>
 			<select>
                             <option value="null"></option>
-                            <option value="Lets Go!">Let's Go!</option>
+                           <!--
+			    <option value="Lets Go!">Let's Go!</option>
                             <option value="Meyham">Meyham</option>
+			   -->
                         </select>
                     </div>
                     <div class="join-input">
@@ -60,6 +63,12 @@
                <div class="textBox">
                    <input type="text" id="msg-enter">
                    <button id="send-msg">Send</button>
+               </div>
+	       <!--ROOM AND USER LIST-->
+               <div class="rms">
+                   <h4 class="room">Room:</h4>
+                   <h4 class="memlist">Members:</h4>
+                   <ul id="mlist"></ul>
                </div>
             </div>
         </div>
