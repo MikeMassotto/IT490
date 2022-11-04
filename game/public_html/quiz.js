@@ -128,7 +128,7 @@ function start_quiz()
     request.open("POST","network/post.php",true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
-	request.send("type=login&text=test");
+	request.send("text=test");
 
 	var request_t = new XMLHttpRequest();
 	request_t.open("POST","network/request.php",true);
@@ -136,14 +136,40 @@ function start_quiz()
 
 	request_t.onreadystatechange= function ()
 	{
-
+        console.log("test");
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
-			console.log(this.responseText);
+			data = this.responseText;
+            result = JSON.parse(JSON.parse(data));
+            //result = shuffle(result);
+            console.log(result["0"]);
+            //console.log("test");
+            //console.log(result);
 		}		
 	}
+    console.log('send');
 	request_t.send("type=get_all_steam_games");
+    console.log('sent');
 }
+
+// Unshamefully taken from https://stackoverflow.com/a/2450976
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
 
 function send_update()
 {

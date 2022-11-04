@@ -39,7 +39,7 @@ function new_button()
     let button = new Entity;
     button.think = button_think;
     button.sprite = new Image();
-    button.sprite.src = "button.png"
+    button.sprite.src = "images/button.png"
     button.scale.x = 0.5;
     button.scale.y = 0.5;
     button.sprite.width = 600;
@@ -49,7 +49,7 @@ function new_button()
     button.hitbox.h = button.sprite.height * button.scale.y;
 
     test = new Image();
-    test.src = "button.png";
+    test.src = "images/button.png";
 
     console.log(test.width);
 
