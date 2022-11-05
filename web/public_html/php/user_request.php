@@ -1,5 +1,16 @@
 <?php
 
+   function get_dir(){
+
+	//https://www.positioniseverything.net/php-header-location/
+
+	// getting hostname
+	$hostname = $_SERVER[“HTTP_HOST”];
+	// getting the current directory preceded by a forward “/” slash
+	$current_directory = rtrim(dirname($_SERVER[‘PHP_SELF’]));
+	return $current_directory;
+   }
+
    function get_profile_info($userid)
    {
 

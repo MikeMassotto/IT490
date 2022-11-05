@@ -39,6 +39,7 @@
     function list_html(id, data_array)
     {
         var list = document.getElementById(id);
+        console.log(typeof(data_array));
         for (var i = 0; i < data_array.length; i++)
         {
             var li = document.createElement("li");
@@ -63,7 +64,8 @@
 
             <a href="lobby_home.html">Home</a> | 
             <a href="user_profile.html">Profile</a> | 
-            <a href="user_settings.html">Settings</a>
+            <a href="user_settings.html">Settings</a> |
+            <a href="index.html">Login</a>
 
         </nav>
 
@@ -94,16 +96,19 @@
 <script>
     //Function Calls
 
-    var profile_info = get_user_data("all")
-    console.log(profile_info)
+    var profile_info = get_user_data("all");
+    profile_info = JSON.parse(profile_info);
+    console.log(profile_info);
 
-    var friends = get_user_data("friends")
-    console.log(friends)
+    var friends = get_user_data("friends");
+    friends = JSON.parse(friends);
+    console.log(friends);
 
-    var achievements = get_user_data("achievements")
-    console.log(achievements)
+    var achievements = get_user_data("achievements");
+    achievements = JSON.parse(achievements);
+    console.log(achievements);
 
-    list_html("friends_list", friends)
-    list_html("achievements", achievements)
+    list_html("friends_list", friends);
+    list_html("achievements", achievements);
 
 </script>

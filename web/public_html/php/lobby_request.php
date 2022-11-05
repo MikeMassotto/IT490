@@ -1,5 +1,16 @@
 <?php
 
+    function get_dir(){
+
+        //https://www.positioniseverything.net/php-header-location/
+
+        // getting hostname
+        $hostname = $_SERVER[“HTTP_HOST”];
+        // getting the current directory preceded by a forward “/” slash
+        $current_directory = rtrim(dirname($_SERVER[‘PHP_SELF’]));
+        return $current_directory;
+    }
+
     function create_room(){
         $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
         $request = array();
@@ -12,7 +23,7 @@
         $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
         $request = array();
         $_SESSION['lobby_host'] = false;
-        header("Location: lobby_game.html");
+        header("Location: http://"+get_dir()+"/lobby_game.html");
         return $client->send_request($request);
     }
 

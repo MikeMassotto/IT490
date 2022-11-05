@@ -1,5 +1,8 @@
-
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once('../../path.inc');
 require_once('../../get_host_info.inc');
 require_once('../../rabbitMQLib.inc');
@@ -9,7 +12,7 @@ if (isset($_SESSION['username'])){
 
 	if (!session_validate()){
 		session_destroy();
-		header("Location: index.html");
+		header("Location: http://"+get_dir()+"/index.html");
 		exit();
 	}
 }
@@ -21,10 +24,21 @@ else
 
 }
 
+function get_dir(){
+
+	//https://www.positioniseverything.net/php-header-location/
+
+	// getting hostname
+	$hostname = $_SERVER[“HTTP_HOST”];
+	// getting the current directory preceded by a forward “/” slash
+	$current_directory = rtrim(dirname($_SERVER[‘PHP_SELF’]));
+	return $current_directory;
+}
+
 //Session Validate
 function session_validate(){
 	
-	$client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+	$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 	$request = array();
 	$request['type'] = "session_validate";
 	$request['session_id'] = session_id();
@@ -35,7 +49,7 @@ function session_validate(){
 
 //Login
 function login($username, $password){
-	$client = new rabbitMQClient("../testRabbitMQ.ini","testServer");
+	$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
     $request = array();
     $request['type'] ='login';
     $request['username'] = $username;
@@ -51,7 +65,7 @@ function login($username, $password){
 		
 		$response = $client->send_request($request);
 		$_SESSION['userid'] = $response;
-		header("Location: lobby_home.html");
+		header("Location: http://"+get_dir()+"/lobby_home.html");
 
 	} 
 	else 
@@ -77,15 +91,15 @@ function logout(){
 
 //New User
 function new_user($username, $password){
-	$client = new rabbitMQClient("../testRabbitMQ.ini","testServer");
+	$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 	$request = array();
     $request['type'] = 'new_user';
     $request['username'] = $username;
 	$request['password'] = password_hash($password, PASSWORD_DEFAULT);
     $response = $client->send_request($request);
 
-	if(true){
-		header("Location: index.html");
+	if($response){
+		header("Location: http://"+get_dir()+"/index.html");
 	} else {
 		return "Registration failed.";
 	}
