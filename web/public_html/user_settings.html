@@ -6,12 +6,12 @@
 
     function change_settings(){
         var request = new XMLHttpRequest();
-        request.open("POST","/php/user_settings.php",true);
+        request.open("POST","/php/user_request.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
-            $priv_profile = document.getElementbyID("priv_profile").checked;
-            $priv_friends = document.getElementbyID("priv_friends").checked;
-            $priv_achi = document.getElementByID("priv_achi").checked;
+        $priv_profile = document.getElementById("priv_profile").checked;
+        $priv_friends = document.getElementById("priv_friends").checked;
+        $priv_achi = document.getElementById("priv_achi").checked;
 
         request.onreadystatechange= function ()
         {
