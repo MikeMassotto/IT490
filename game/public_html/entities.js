@@ -13,7 +13,7 @@ function new_timer()
 
 function timer_think( self )
 {
-    console.log(self.sprite)
+    //console.log(self.sprite)
     if( self.nums.y == 60)
     {
         self.nums.x--;
@@ -39,7 +39,7 @@ function new_button()
     let button = new Entity;
     button.think = button_think;
     button.sprite = new Image();
-    button.sprite.src = "button.png"
+    button.sprite.src = "images/button.png"
     button.scale.x = 0.5;
     button.scale.y = 0.5;
     button.sprite.width = 600;
@@ -49,7 +49,7 @@ function new_button()
     button.hitbox.h = button.sprite.height * button.scale.y;
 
     test = new Image();
-    test.src = "button.png";
+    test.src = "images/button.png";
 
     console.log(test.width);
 
@@ -66,6 +66,18 @@ function button_think( self )
 
         if( collision_point_rect( engine.mouse.position, self.hitbox ))
         {
+            if(entity_manager.entity_manager_check_if_tag_exists("clicked")) return;
+            
+            if( self.label.text == solution_name){
+                correct = true;
+            }
+            else{
+                console.log(self.label.text);
+                console.log(solution_name);
+            }
+                
+            self.tag = "clicked";
+            
             old = new Vector2d;
             old.x = self.hitbox.w;
             old.y = self.hitbox.h;
@@ -74,6 +86,7 @@ function button_think( self )
             scale.x = 0.4;
             scale.y = 0.4;
 
+            
             self.entity_scale( scale );
 
             offset = new Vector2d;
