@@ -14,19 +14,19 @@
         //This bullshit is so we can concat the userid to the request
         const queryString = window.location.search; 
         const urlParams = new URLSearchParams(queryString);
-        const userid = urlParams.get('userid')
-        console.log(userid);
+        const userid = urlParams.get('userid');
 
         request.onreadystatechange = function ()
         {
 
             if ((this.readyState == 4)&&(this.status == 200))
             {
-                replace_html("username", this.responseText);
+                sessionStorage.setItem(data_type, this.responseText);
+                //replace_html("username", this.responseText);
                 return this.responseText;
             }
         }
-        request.send("type=",data_type,"&userid=",userid);
+        request.send("type="+data_type+"&userid="+userid);
     }
 
     //Replaces HTML Text with text sent in replace_text parameter
@@ -97,16 +97,16 @@
     //Function Calls
 
     var profile_info = get_user_data("all");
-    profile_info = JSON.parse(profile_info);
-    console.log(profile_info);
+    profile_info = sessionStorage.getItem("all");
 
     var friends = get_user_data("friends");
-    friends = JSON.parse(friends);
-    console.log(friends);
+    friends = sessionStorage.getItem("friends");
 
     var achievements = get_user_data("achievements");
-    achievements = JSON.parse(achievements);
-    console.log(achievements);
+    achievements = sessionStorage.getItem("achievements");
+
+    console.log(profile_info);
+    console.log(friends);
 
     list_html("friends_list", friends);
     list_html("achievements", achievements);

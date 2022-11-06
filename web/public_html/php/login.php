@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 require_once('../../path.inc');
 require_once('../../get_host_info.inc');
 require_once('../../rabbitMQLib.inc');
@@ -77,21 +80,6 @@ function login($username, $password){
 	}
 }
 
-//Logout
-function logout(){
-    if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
-        $params["path"], $params["domain"],
-        $params["secure"], $params["httponly"]
-    );
-  }
-  
-  session_destroy();
-
-  return "Session destroyed";
-}
-
 //New User
 function new_user($username, $password){
 	$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
@@ -111,6 +99,21 @@ function new_user($username, $password){
 	} else {
 		return "Username already exists.";
 	}
+}
+
+//Logout
+function logout(){
+    if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
+  }
+  
+  session_destroy();
+
+  return "Session destroyed";
 }
 
 //Handles login requests

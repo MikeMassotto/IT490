@@ -1,55 +1,58 @@
 <?php
 
+   // error_reporting(E_ALL);
+   // ini_set("display_errors", 1);
+
+   require_once('../../path.inc');
+   require_once('../../get_host_info.inc');
+   require_once('../../rabbitMQLib.inc');
+
    function get_dir(){
 
-	//https://www.positioniseverything.net/php-header-location/
+	   //https://www.positioniseverything.net/php-header-location/
 
-	// getting hostname
-	$hostname = $_SERVER[“HTTP_HOST”];
-	// getting the current directory preceded by a forward “/” slash
-	$current_directory = rtrim(dirname($_SERVER[‘PHP_SELF’]));
-	return $current_directory;
+	   // getting hostname
+      $hostname = $_SERVER[“HTTP_HOST”];
+      // getting the current directory preceded by a forward “/” slash
+      $current_directory = rtrim(dirname($_SERVER[‘PHP_SELF’]));
+      return $current_directory;
    }
 
    function get_profile_info($userid)
    {
-
-      $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+      
+      $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
       $request = array();
       $request['type'] = "get_user_data";
       $request['user_id'] = $userid;
-      echo json_encode($request);
 
       $response = $client ->send_request($request);
-
-      if($response)
-      {
-         echo $response;
-         return $response;
-      }
-
-      return "No response.";
-
+      return $response;
    }
 
    function get_friends_list($userid)
    {
 
-      $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+      $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
       $request = array();
       $request['type'] = "get_friends_list";
       $request['user_id'] = $userid;
-      echo json_encode($request);
 
       $response = $client ->send_request($request);
+      return $response;
 
-      if($response)
-      {
-         echo $response;
-         return $response;
-      }
+   }
 
-      return "No response.";
+   function get_achievements($userid)
+   {
+
+      $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+      $request = array();
+      $request['type'] = "get_achievements";
+      $request['user_id'] = $userid;
+
+      $response = $client ->send_request($request);
+      return $response;
 
    }
 
@@ -67,7 +70,7 @@
 
    function update_settings($profile_privacy, $friend_privacy, $achievement_privacy)
    {
-      $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+      $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
       
       //Update profile privacy
       $request = array();
@@ -75,7 +78,6 @@
       $request['user_id'] = $_SESSION['userid'];
       $request['public'] = true_false_to_1_0($profile_privacy);
       $response = $client ->send_request($request);
-      echo json_encode($response);
 
       //Update friend privacy
       $request = array();
@@ -83,7 +85,6 @@
       $request['user_id'] = $_SESSION['userid'];
       $request['public'] = true_false_to_1_0($friend_privacy);
       $response = $client ->send_request($request);
-      echo json_encode($response);
 
       //Update achievements privacy
       $request = array();
@@ -91,7 +92,6 @@
       $request['user_id'] = $_SESSION['userid'];
       $request['public'] = true_false_to_1_0($achievement_privacy);
       $response = $client ->send_request($request);
-      echo json_encode($response);
 
    }
 
@@ -102,11 +102,15 @@
    switch ($request["type"]){
 
       case "all":
-         $response = get_profile_info($request["userid"]);
+         $response = get_profile_info($request["user_id"]);
          break;
 
       case "friends_list":
-         $response = get_friends_list($request["userid"]);
+         $response = get_friends_list($request["user_id"]);
+         break;
+
+      case "achievements":
+         $response = get_achievements($request["user_id"]);
          break;
 
       case "settings":
@@ -114,7 +118,7 @@
          break;
    }
 
-   echo json_encode($response);
+   echo $response;
    exit(0);
 
 ?>
