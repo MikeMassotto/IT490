@@ -14,7 +14,7 @@
         //This bullshit is so we can concat the userid to the request
         const queryString = window.location.search; 
         const urlParams = new URLSearchParams(queryString);
-        const userid = urlParams.get('userid');
+        const userid = urlParams.get('user_id');
 
         request.onreadystatechange = function ()
         {
@@ -26,7 +26,7 @@
                 return this.responseText;
             }
         }
-        request.send("type="+data_type+"&userid="+userid);
+        request.send("type="+data_type+"&user_id="+userid);
     }
 
     //Replaces HTML Text with text sent in replace_text parameter
