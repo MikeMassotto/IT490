@@ -1,49 +1,66 @@
-
 <?php
+
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 require_once('../../path.inc');
 require_once('../../get_host_info.inc');
 require_once('../../rabbitMQLib.inc');
 
-//Session Check/Creation
-if (isset($_SESSION['username'])){
+echo "inside login.php";
 
-	if (!session_validate()){
-		session_destroy();
-		header("Location: index.html");
-		exit();
-	}
-}
-else 
-{
 
-	session_start();
-	$id = session_id();
+function get_dir(){
 
+	//https://www.positioniseverything.net/php-header-location/
+
+	// getting hostname
+	$hostname = $_SERVER[“HTTP_HOST”];
+	// getting the current directory preceded by a forward “/” slash
+	$current_directory = rtrim(dirname($_SERVER[‘PHP_SELF’]));
+	return $current_directory;
 }
 
 //Session Validate
 function session_validate(){
 	
-	$client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+	$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 	$request = array();
 	$request['type'] = "session_validate";
 	$request['session_id'] = session_id();
 	$response = $client->send_request($request);
+
+	// if (isset($_SESSION['username'])){
+
+	// 	if (!session_validate()){
+	// 		session_destroy();
+	// 		header("Location: http://"+get_dir()+"/index.html");
+	// 		exit();
+	// 	}
+	// }
+	// else 
+	// {
+	
+	// 	session_start();
+	// 	$id = session_id();
+	
+	// }
+
 	return $response;
 
 }
 
 //Login
 function login($username, $password){
-	$client = new rabbitMQClient("../testRabbitMQ.ini","testServer");
+	$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
     $request = array();
     $request['type'] ='login';
     $request['username'] = $username;
     $request['password'] = password_hash($password, PASSWORD_DEFAULT);
     $response = $client->send_request($request);
 
-	//Session Exists? Send to lobby_home.html
-	if($response){
+	//Password Verification
+	if(password_verify($password, $response)){
 
 		$_SESSION['username'] = 'username';
 
@@ -51,12 +68,36 @@ function login($username, $password){
 		
 		$response = $client->send_request($request);
 		$_SESSION['userid'] = $response;
-		header("Location: lobby_home.html");
+
+		echo $_SESSION['userid'];
+
+		header("Location: http://"+get_dir()+"/lobby_home.html");
 
 	} 
 	else 
 	{
 		return "Username or password does not exist.";
+	}
+}
+
+//New User
+function new_user($username, $password){
+	$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+	$request = array();
+    $request['type'] = 'new_user';
+    $request['username'] = $username;
+	$request['password'] = password_hash($password, PASSWORD_DEFAULT);
+	$response = $client->send_request($request);
+	echo $response;
+
+	if(strcmp($response, 'succ') == 0){
+
+		echo "in the succ";
+		header("Location: http://"+get_dir()+"/index.html");
+		return "Registration successful.";
+
+	} else {
+		return "Username already exists.";
 	}
 }
 
@@ -75,22 +116,6 @@ function logout(){
   return "Session destroyed";
 }
 
-//New User
-function new_user($username, $password){
-	$client = new rabbitMQClient("../testRabbitMQ.ini","testServer");
-	$request = array();
-    $request['type'] = 'new_user';
-    $request['username'] = $username;
-	$request['password'] = password_hash($password, PASSWORD_DEFAULT);
-    $response = $client->send_request($request);
-
-	if(true){
-		header("Location: index.html");
-	} else {
-		return "Registration failed.";
-	}
-}
-
 //Handles login requests
 if (!isset($_POST))
 {
@@ -98,9 +123,12 @@ if (!isset($_POST))
 	echo json_encode($msg);
 	exit(0);
 }
+
+//Receive response from HTML
 $request = $_POST;
 
 $response = "unsupported request type, politely FUCK OFF";
+
 switch ($request["type"])
 {
 	case "login":
@@ -114,11 +142,12 @@ switch ($request["type"])
 		break;
 	
 	case "new_user":
-		$reponse = new_user($request["uname"], $request["password"]);
+		$response = new_user($request["uname"], $request["password"]);
 
 		break;
 
 }
+
 echo json_encode($response);
 exit(0);
 
