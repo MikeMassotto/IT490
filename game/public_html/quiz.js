@@ -1,18 +1,58 @@
 var engine = new Engine();
 var correct = false;
+var game_list;
+var solution_index;
+var solution_name = '';
+
+var round_max = 10;
+var round_count = 7;
 
 
 
 window.onload = function()
 {
     engine.start();
+    add_session_var_from_server("name");
 }
 
 engine.init = function()
 {
     console.log("init");
+    
+    //get_session_var("name");
 
-    start_quiz();
+    var request_t = new XMLHttpRequest();
+	request_t.open("POST","network/request.php",true);
+	request_t.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+    request_t.onreadystatechange= function ()
+	{
+        console.log("test");
+		if ((this.readyState == 4)&&(this.status == 200))
+		{
+			data = this.responseText;
+            result = JSON.parse(JSON.parse(data));
+            game_1 = Math.floor(Math.random() * 100);
+            console.log(result[game_1.toString()]);
+            game_list = result;
+
+            entity_manager.clear();
+            start_quiz();
+
+            //console.log("test");
+            //console.log(result);
+		}		
+	}
+    console.log('send');
+	request_t.send("type=get_all_steam_games");
+    console.log('sent');
+
+    text = new Entity;
+    text.label.text =  "Connecting...";
+    text.position.x = 1280/2;
+    text.position.y = 720/2;
+    text.label.font = "72px serif"
+
 }
 
 engine.update = function()
@@ -40,8 +80,20 @@ engine.render = function()
 
 function game_over()
 {
-    console.log("Game Over");
+    round_count++;
+    
+    
+    
     entity_manager.clear();
+
+    if( round_count >= 10 ){
+        text = new Entity;
+        text.label.text =  "Game Over";
+        text.position.x = 1280/2;
+        text.position.y = 720/2;
+        text.label.font = "72px serif"
+        return;
+    }
 
     timer = new_timer();
     timer.position.x = 1200;
@@ -52,8 +104,10 @@ function game_over()
 
     text = new Entity;
     text.label.text =  "You were wrong.";
-    if( correct ) text.label.text =  "Correct!";
-    text.position.x = 1280/2;
+    if( correct ){
+        text.label.text =  "Correct!";
+    }
+        text.position.x = 1280/2;
     text.position.y = 720/2;
     text.label.font = "72px serif"
 
@@ -71,29 +125,47 @@ function game_over()
 function start_quiz()
 {
     correct = false;
-    console.log("init");
+    solution_index = Math.floor(Math.random() * 4);
+    let random_nums = [Math.floor(Math.random() * 100)];
+
+    while(true)
+    {
+        if(random_nums.length == 4) break;
+        num = Math.floor(Math.random() * 100);
+        if( !random_nums.includes(num) ){
+            random_nums.push(num);
+        }
+
+    }
+    
+    user_name = new Entity;
+    user_name.label.text = sessionStorage.getItem("name");
+    user_name.position.x = 50;
+    user_name.position.y = 50;
 
     btn_1 = new_button();
     btn_1.position.x = 50;
     btn_1.position.y = 150;
-    btn_1.label.text = "Counter Strike: Global Offensive";
-    btn_1.label.font = "22px serif"
+    btn_1.label.text = game_list[random_nums[0].toString()]["1"];
+    btn_1.tag = 0;
 
     btn_2 = new_button();
     btn_2.position.x = 50;
     btn_2.position.y = btn_1.position.y + 100;
-    btn_2.label.text = "Call of Duty: Modern Warfare II";
-    btn_2.label.font = "22px serif"
+    btn_2.label.text = game_list[random_nums[1].toString()]["1"];
+    btn_2.tag = 1;
 
     btn_3 = new_button();
     btn_3.position.x = 50;
     btn_3.position.y = btn_2.position.y + 100;
-    btn_3.label.text = "Team Fortress 2";
+    btn_3.label.text = game_list[random_nums[2].toString()]["1"];
+    btn_3.tag = 2;
 
     btn_4 = new_button();
     btn_4.position.x = 50;
     btn_4.position.y = btn_3.position.y + 100;
-    btn_4.label.text = "Rust";
+    btn_4.label.text = game_list[random_nums[3].toString()]["1"];
+    btn_4.tag = 3;
 
     timer = new_timer();
     timer.position.x = 1200;
@@ -103,24 +175,18 @@ function start_quiz()
     timer.label.font = "64px serif"
 
     tags = new Entity;
-    tags.label.text = "FPS, PvP, PvE"
+    tags.label.text = game_list[random_nums[solution_index].toString()]["3"].replace(",", ", ");
     tags.position.x = 800;
     tags.position.y = 300;
 
     l1 = new Entity;
-    l1.label.text = "The only aim in ________ is to survive.";
+    l1.label.text = game_list[random_nums[solution_index].toString()]["2"].replace(game_list[random_nums[solution_index].toString()]["1"], "___");
     l1.position.x = 800;
     l1.position.y = 400;
 
-    l2 = new Entity;
-    l2.label.text = "Everything wants you to die - the island’s wildlife and other inhabitants,";
-    l2.position.x = 800;
-    l2.position.y = 430;
+    solution_name = game_list[random_nums[solution_index].toString()]["1"];
 
-    l3 = new Entity;
-    l3.label.text =  "the environment, other survivors. Do whatever it takes to last another night.";
-    l3.position.x = 800;
-    l3.position.y = 460;
+    console.log(solution_name);
 
     console.log("network update");
     
@@ -129,50 +195,27 @@ function start_quiz()
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
 	request.send("text=test");
-
-	var request_t = new XMLHttpRequest();
-	request_t.open("POST","network/request.php",true);
-	request_t.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-
-	request_t.onreadystatechange= function ()
-	{
-        console.log("test");
-		if ((this.readyState == 4)&&(this.status == 200))
-		{
-			data = this.responseText;
-            result = JSON.parse(JSON.parse(data));
-            //result = shuffle(result);
-            console.log(result["0"]);
-            //console.log("test");
-            //console.log(result);
-		}		
-	}
-    console.log('send');
-	request_t.send("type=get_all_steam_games");
-    console.log('sent');
 }
-
-// Unshamefully taken from https://stackoverflow.com/a/2450976
-function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
-  
-    // While there remain elements to shuffle.
-    while (currentIndex != 0) {
-  
-      // Pick a remaining element.
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
-    }
-  
-    return array;
-  }
 
 function send_update()
 {
    
 
+}
+
+function add_session_var_from_server( session_var )
+{
+    var request = new XMLHttpRequest();
+    request.open("POST","network/request.php",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+    request.onreadystatechange= function ()
+	{
+		if ((this.readyState == 4)&&(this.status == 200))
+		{
+            sessionStorage.setItem(session_var, this.responseText);
+			return;
+		}		
+	}
+	request.send("type=get_session_var&var=" + session_var);
 }

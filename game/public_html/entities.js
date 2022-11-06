@@ -66,6 +66,18 @@ function button_think( self )
 
         if( collision_point_rect( engine.mouse.position, self.hitbox ))
         {
+            if(entity_manager.entity_manager_check_if_tag_exists("clicked")) return;
+            
+            if( self.label.text == solution_name){
+                correct = true;
+            }
+            else{
+                console.log(self.label.text);
+                console.log(solution_name);
+            }
+                
+            self.tag = "clicked";
+            
             old = new Vector2d;
             old.x = self.hitbox.w;
             old.y = self.hitbox.h;
@@ -74,6 +86,7 @@ function button_think( self )
             scale.x = 0.4;
             scale.y = 0.4;
 
+            
             self.entity_scale( scale );
 
             offset = new Vector2d;
