@@ -1,28 +1,11 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once('../../path.inc');
 require_once('../../get_host_info.inc');
 require_once('../../rabbitMQLib.inc');
 
-//Session Check/Creation
-if (isset($_SESSION['username'])){
+echo "inside login.php";
 
-	if (!session_validate()){
-		session_destroy();
-		header("Location: http://"+get_dir()+"/index.html");
-		exit();
-	}
-}
-else 
-{
-
-	session_start();
-	$id = session_id();
-
-}
 
 function get_dir(){
 
@@ -43,6 +26,23 @@ function session_validate(){
 	$request['type'] = "session_validate";
 	$request['session_id'] = session_id();
 	$response = $client->send_request($request);
+
+	// if (isset($_SESSION['username'])){
+
+	// 	if (!session_validate()){
+	// 		session_destroy();
+	// 		header("Location: http://"+get_dir()+"/index.html");
+	// 		exit();
+	// 	}
+	// }
+	// else 
+	// {
+	
+	// 	session_start();
+	// 	$id = session_id();
+	
+	// }
+
 	return $response;
 
 }
@@ -56,8 +56,8 @@ function login($username, $password){
     $request['password'] = password_hash($password, PASSWORD_DEFAULT);
     $response = $client->send_request($request);
 
-	//Session Exists? Send to lobby_home.html
-	if($response){
+	//Password Verification
+	if(password_verify($password, $response)){
 
 		$_SESSION['username'] = 'username';
 
@@ -65,6 +65,9 @@ function login($username, $password){
 		
 		$response = $client->send_request($request);
 		$_SESSION['userid'] = $response;
+
+		echo $_SESSION['userid'];
+
 		header("Location: http://"+get_dir()+"/lobby_home.html");
 
 	} 
@@ -96,12 +99,17 @@ function new_user($username, $password){
     $request['type'] = 'new_user';
     $request['username'] = $username;
 	$request['password'] = password_hash($password, PASSWORD_DEFAULT);
-    $response = $client->send_request($request);
+	$response = $client->send_request($request);
+	echo $response;
 
-	if($response){
+	if(strcmp($response, 'succ') == 0){
+
+		echo "in the succ";
 		header("Location: http://"+get_dir()+"/index.html");
+		return "Registration successful.";
+
 	} else {
-		return "Registration failed.";
+		return "Username already exists.";
 	}
 }
 
@@ -112,9 +120,12 @@ if (!isset($_POST))
 	echo json_encode($msg);
 	exit(0);
 }
+
+//Receive response from HTML
 $request = $_POST;
 
 $response = "unsupported request type, politely FUCK OFF";
+
 switch ($request["type"])
 {
 	case "login":
@@ -128,11 +139,12 @@ switch ($request["type"])
 		break;
 	
 	case "new_user":
-		$reponse = new_user($request["uname"], $request["password"]);
+		$response = new_user($request["uname"], $request["password"]);
 
 		break;
 
 }
+
 echo json_encode($response);
 exit(0);
 
