@@ -112,10 +112,6 @@ class Entity {
         this.label.offset.x = ( this.sprite.width * this.scale.x ) / 2;
         this.label.offset.y = ( this.sprite.height * this.scale.y ) / 2;
 
-        if( this.label.text == "Rust"){
-            correct = true;
-        }
-
     }
 }
 
@@ -170,13 +166,52 @@ class Entity_Manager {
             engine.ctx.fillStyle = ent.label.color;
             engine.ctx.textAlign = "center";
             engine.ctx.textBaseline = "middle";
-            engine.ctx.fillText( ent.label.text, ent.position.x + ent.label.offset.x,  ent.position.y + ent.label.offset.y );
+            //engine.ctx.fillText( ent.label.text, ent.position.x + ent.label.offset.x,  ent.position.y + ent.label.offset.y );
+
+            // Text wrap code modified from https://www.html5canvastutorials.com/tutorials/html5-canvas-wrap-text-tutorial/
+            let lineHeight = 32;
+            let maxWidth = 724;
+            let text = ent.label.text;
+            let context = engine.ctx;
+            let x = ent.position.x + ent.label.offset.x;
+            let y = ent.position.y + ent.label.offset.y;
+            var words = [text];
+            if(/\s/.test(text))
+            {
+                words = text.toString().split(' ');
+            }
+            var line = '';
+    
+            for(var n = 0; n < words.length; n++) {
+                var testLine = line + words[n] + ' ';
+                var metrics = context.measureText(testLine);
+                var testWidth = metrics.width;
+                if (testWidth > maxWidth && n > 0) {
+                context.fillText(line, x, y);
+                line = words[n] + ' ';
+                y += lineHeight;
+                }
+                else {
+                line = testLine;
+                }
+            }
+            context.fillText(line, x, y);
 
            // engine.ctx.move(ent.hitbox.x, ent.hitbox.y);
 
 
         }
         
+    }
+
+    entity_manager_check_if_tag_exists(tag)
+    {
+        for( let i = 0; i < this.entity_count; i++){
+            if( this.entity_list[i].tag == tag){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
