@@ -5,7 +5,7 @@ var solution_index;
 var solution_name = '';
 
 var round_max = 10;
-var round_count = 7;
+var round_count = 9;
 
 
 
@@ -27,7 +27,6 @@ engine.init = function()
 
     request_t.onreadystatechange= function ()
 	{
-        console.log("test");
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
 			data = this.responseText;
@@ -92,6 +91,13 @@ function game_over()
         text.position.x = 1280/2;
         text.position.y = 720/2;
         text.label.font = "72px serif"
+        
+        var request = new XMLHttpRequest();
+        request.open("POST","network/request.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    
+        request.send("type=update_user_stats&user_id=2&win=1&points=10");
+
         return;
     }
 
@@ -137,6 +143,22 @@ function start_quiz()
         }
 
     }
+
+    var request = new XMLHttpRequest();
+    request.open("POST","network/post.php",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    console.log("post");
+    request.onreadystatechange = function(){
+        if ((this.readyState == 4)&&(this.status == 200))
+		{
+			console.log(this.responseText);
+		}	
+    }
+	request.send("status=starting&game1=" + random_nums[0].toString() + 
+    "&game2=" + random_nums[1].toString() + 
+    "&game3=" + random_nums[2].toString() +
+    "&game4=" + random_nums[3].toString() + 
+    "&solution=" + solution_index.toString());
     
     user_name = new Entity;
     user_name.label.text = sessionStorage.getItem("name");
@@ -175,12 +197,12 @@ function start_quiz()
     timer.label.font = "64px serif"
 
     tags = new Entity;
-    tags.label.text = game_list[random_nums[solution_index].toString()]["3"].replace(",", ", ");
+    tags.label.text = game_list[random_nums[solution_index].toString()]["3"].replace("/,/g", ", ");
     tags.position.x = 800;
     tags.position.y = 300;
 
     l1 = new Entity;
-    l1.label.text = game_list[random_nums[solution_index].toString()]["2"].replace(game_list[random_nums[solution_index].toString()]["1"], "___");
+    l1.label.text = game_list[random_nums[solution_index].toString()]["2"].replace("/" + game_list[random_nums[solution_index].toString()]["1"] + "/g", "___");
     l1.position.x = 800;
     l1.position.y = 400;
 
@@ -190,11 +212,7 @@ function start_quiz()
 
     console.log("network update");
     
-    var request = new XMLHttpRequest();
-    request.open("POST","network/post.php",true);
-	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
-	request.send("text=test");
 }
 
 function send_update()
@@ -213,7 +231,7 @@ function add_session_var_from_server( session_var )
 	{
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
-            sessionStorage.setItem(session_var, this.responseText);
+            sessionStorage.setItem(session_var, json.parse(this.responseText));
 			return;
 		}		
 	}
