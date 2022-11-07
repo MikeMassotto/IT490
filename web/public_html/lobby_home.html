@@ -10,7 +10,7 @@
 
 
         var request = new XMLHttpRequest();
-        request.open("POST","/php/lobby_request.php",true);
+        request.open("POST","php/lobby_request.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
         request.onreadystatechange= function ()
@@ -27,7 +27,7 @@
 
     function create_lobby_req(){
         var request = new XMLHttpRequest();
-        request.open("POST","/php/lobby_request.php",true);
+        request.open("POST","php/lobby_request.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
         request.onreadystatechange= function ()
@@ -44,7 +44,7 @@
 
     function list_lobbies(){
         var request = new XMLHttpRequest();
-        request.open("POST","/php/lobby_request.php",true);
+        request.open("POST","php/lobby_request.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
         request.onreadystatechange= function ()

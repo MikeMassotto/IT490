@@ -12,7 +12,7 @@
     }
 
     function create_room(){
-        $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+        $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
         $request = array();
         $request['type'] = 'lobby_add';
         $_SESSION['lobby_host'] = true;
@@ -21,15 +21,14 @@
     }
 
     function join_room($lobbyid){
-        $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+        $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
         $request = array();
         $_SESSION['lobby_host'] = false;
-        header("Location: http://"+get_dir()+"/lobby_game.html");
         return $client->send_request($request);
     }
 
     function list_rooms(){
-        $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+        $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
         $request = array();
         $request['type'] = "get_lobbies";
         return $client->send_request($request);

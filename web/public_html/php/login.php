@@ -2,14 +2,13 @@
 
 session_start();
 
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+// error_reporting(E_ALL);
+// ini_set("display_errors", 1);
 
 require_once('../../path.inc');
 require_once('../../get_host_info.inc');
 require_once('../../rabbitMQLib.inc');
 
-echo "inside login.php";
 
 function get_dir(){
 
@@ -59,7 +58,6 @@ function login($username, $password){
     $request['username'] = $username;
     $response = $client->send_request($request);
 
-	echo PHP_EOL . $response . PHP_EOL;
 	$response = json_decode($response);
 
 	//Password Verification
@@ -68,8 +66,7 @@ function login($username, $password){
 		$_SESSION['userid'] = $response->{'id'};
 		$_SESSION['username'] = $username;
 
-		header("Location: ../lobby_home.html");
-		exit(0);
+		return "true";
 
 	} 
 	else 
@@ -150,7 +147,7 @@ switch ($request["type"])
 
 }
 
-echo json_encode($response);
+echo $response;
 exit(0);
 
 ?>

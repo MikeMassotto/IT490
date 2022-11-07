@@ -21,7 +21,10 @@ function SendLoginRequest()
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
 			console.log(this.responseText);
-			HandleLoginResponse(this.responseText);
+			if(this.responseText == "true")
+			{
+				window.location.replace("lobby_home.html");
+			}
 		}		
 	}
 	request.send("type=login&uname="+username+"&password="+password);
