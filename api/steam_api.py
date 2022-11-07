@@ -138,8 +138,6 @@ def request_app_details( appid ):
     background = data["background_raw"]
     mature = 1 if len(data["content_descriptors"]["ids"]) > 0 else 0 # Expression: Check if content_descriptors ids are present, if they are then its mature. I think...
 
-    #print(name)
-
     data = {
         "type" : type,
         "name" : name,
@@ -150,8 +148,8 @@ def request_app_details( appid ):
         "header_image" : header_image,
         "website" : website,
        # "metacritic" : metacritic,
-        "genres" : genres,
-        "categories" : categories,
+        "genres" : ','.join(genres),
+        "categories" : ','.join(categories),
         "release_date" : release_date,
         "background" : background,
         "mature" : mature

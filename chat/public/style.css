@@ -5,7 +5,7 @@
 }
 
 body{
-	font-family: "Roboto", monospace;
+	font-family: cursive;
 	height: 100%;
 	display: flex;
 	justify-content: center;
@@ -16,8 +16,8 @@ body{
 	width: 100%;
 	height: 100%;
 	max-width: 600px;
-	background: grey;
-	border-left: 1px solid yellow;
+	background: lightcyan;
+	border-left: 1px solid red;
 	border-right: 1px solid yellow;
 }
 
@@ -28,7 +28,7 @@ body{
 .chatapp > .screen.active{
 	display: block;
 	width: 100%;
-	height: 100%;
+	height: 70%;
 }
 
 .screen .join{
@@ -66,6 +66,14 @@ body{
 	font-size: 16px;
 }
 
+.screen .join-input select{
+	width: 10%;
+	padding: 10px;
+	border: 1px solid blue;
+	font-size: 16px;
+}
+
+/*JOIN CHAT BUTTON*/
 .screen .join-input button{
 	padding: 10px 20px;
 	background: orange;
@@ -76,6 +84,7 @@ body{
 	border: none;
 }
 
+/*LOGO AND LEAVE BUTTON*/
 .chat-screen .header{
 	background: #110;
 	height: 50px;
@@ -85,12 +94,14 @@ body{
 	padding: 0px 20px;
 }
 
+/*CHAT ROOM LOGO*/
 .chat-screen .header .logo{
 	font-size: 18px;
 	color: skyblue;
 	font-weight: 600;
 }
 
+/*LEAVE ROOM BUTTON*/
 .chat-screen .header button{
 	padding: 5px 10px;
 	border: 1px solid orange;
@@ -113,6 +124,7 @@ body{
 	padding: 10px;
 }
 
+/*DISPLAY MESAGE BACKGROUND COLOR*/
 .chat-screen .msgs .msg > div{
 	max-width: 80%;	
 	background: #f5f5f5;
@@ -120,14 +132,17 @@ body{
 	padding: 10px;
 }
 
+/*USER MESSAGE POSTION*/
 .chat-screen .msgs .msg.my-msg{
 	justify-content: flex-end;
 }
 
+/*OTHER MEMEBER MESSAGE POSITION*/
 .chat-screen .msgs .msg.other-msg{
 	justify-content: flex-start;
 }
 
+/*NAME*/
 .chat-screen .msgs .msg .user-name{
 	font-size: 13px;
 	color: blue;
@@ -138,9 +153,10 @@ body{
 	word-wrap: break-word;
 }
 
+/*JOIN/LEAVE USER MESSAGE*/
 .chat-screen .msgs .update{
 	text-align: center;
-	padding: 10px;
+	padding: 20px;
 	font-style: italic;
 }
 

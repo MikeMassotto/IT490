@@ -14,19 +14,42 @@
         //This bullshit is so we can concat the userid to the request
         const queryString = window.location.search; 
         const urlParams = new URLSearchParams(queryString);
-        const userid = urlParams.get('userid')
-        console.log(userid);
+        const userid = urlParams.get('user_id');
 
         request.onreadystatechange = function ()
         {
 
             if ((this.readyState == 4)&&(this.status == 200))
             {
-                replace_html("username", this.responseText);
+                sessionStorage.setItem(data_type, this.responseText);
+                //replace_html("username", this.responseText);
                 return this.responseText;
             }
         }
-        request.send("type=",data_type,"&userid=",userid);
+        request.send("type="+data_type+"&user_id="+userid);
+    }
+
+    //Sending a friend request
+    function send_friend_req(){
+
+        username = get_user_data("username");
+        friend_request = document.getElementById("friend_name").value;
+
+        var request = new XMLHttpRequest();
+        request.open("POST","/php/user_request.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+        request.onreadystatechange= function ()
+        {
+            
+            if ((this.readyState == 4)&&(this.status == 200))
+            {
+                console.log(this.responseText);
+                HandleLoginResponse(this.responseText);
+            }		
+        }
+        request.send("type=friend_req&username="+username+"&friend_name="+friend_request);
+
     }
 
     //Replaces HTML Text with text sent in replace_text parameter
@@ -39,6 +62,7 @@
     function list_html(id, data_array)
     {
         var list = document.getElementById(id);
+        console.log(typeof(data_array));
         for (var i = 0; i < data_array.length; i++)
         {
             var li = document.createElement("li");
@@ -63,7 +87,8 @@
 
             <a href="lobby_home.html">Home</a> | 
             <a href="user_profile.html">Profile</a> | 
-            <a href="user_settings.html">Settings</a>
+            <a href="user_settings.html">Settings</a> |
+            <a href="index.html">Login</a>
 
         </nav>
 
@@ -78,6 +103,13 @@
         <ul id="achievements"></ul>
     
         <h2>Friends</h2>
+
+        <!--Friend Requests-->
+        <form action="javascript:send_friend_req()">
+            <label for="friend_name">Username:</label><br>
+            <input type="text" id="friend_name" name="friend_username"><br>
+            <input type="submit" value="Send Friend Request">
+        </form>
 
         <ul id="friends_list"></ul>
 
@@ -94,16 +126,19 @@
 <script>
     //Function Calls
 
-    var profile_info = get_user_data("all")
-    console.log(profile_info)
+    var profile_info = get_user_data("all");
+    profile_info = sessionStorage.getItem("all");
 
-    var friends = get_user_data("friends")
-    console.log(friends)
+    var friends = get_user_data("friends");
+    friends = sessionStorage.getItem("friends");
 
-    var achievements = get_user_data("achievements")
-    console.log(achievements)
+    var achievements = get_user_data("achievements");
+    achievements = sessionStorage.getItem("achievements");
 
-    list_html("friends_list", friends)
-    list_html("achievements", achievements)
+    console.log(profile_info);
+    console.log(friends);
+
+    list_html("friends_list", friends);
+    list_html("achievements", achievements);
 
 </script>

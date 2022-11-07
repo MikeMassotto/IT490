@@ -8,9 +8,10 @@
 	chatapp.querySelector(".join-screen #join-user").addEventListener("click", function(){
 		
 		let user = chatapp.querySelector(".join-screen #username").value;
-
+		
+		//ERROR MSG IF USERNAME NOT ENTERED
 		if(user.length == 0){
-			return;
+			return alert("Enter username");
 		}
 
 		socket.emit("newmember", user);
@@ -22,16 +23,18 @@
 	chatapp.querySelector(".chat-screen #send-msg").addEventListener("click", function(){
 
 		let msg = chatapp.querySelector(".chat-screen #msg-enter").value;
-
+		
 		if (msg.length == 0){
 			return;
 		}
-
+		
+		//DISPLAY USER NAME
 		renderMessage("my", {
 			user : member,
 			text : msg
 		});
-
+		
+		//DISPLAY USER MESSAGE
 		socket.emit("chat", {
 			user : member,
 			text : msg 
@@ -39,7 +42,8 @@
 
 		chatapp.querySelector(".chat-screen #msg-enter").value = "";
 	});
-
+	
+	//RETURN TO HOME(USER JOIN SCREEN)
 	chatapp.querySelector(".chat-screen #exit-room").addEventListener("click", function(){
 		socket.emit("dropmember", member);
 		window.location.href = window.location.href;
@@ -57,7 +61,8 @@
 	function renderMessage(type, msg){
 		
 		let msgview = chatapp.querySelector(".chat-screen .msgs");
-
+		
+		//USER MESSAGE
 		if(type == "my"){
 			
 			let tag = document.createElement("div");
@@ -72,7 +77,8 @@
 			`;
 			msgview.appendChild(tag);
 		}
-
+		
+		//ADDITION USER MESSAGE
 		else if (type == "other"){
 			
 			let tag = document.createElement("div");
@@ -87,7 +93,8 @@
 			`;
 			msgview.appendChild(tag);
 		}
-
+		
+		//UPDATE CHAT JOIN/LEAVE MESAGE
 		else if (type == "update"){
 			
 			let tag = document.createElement("div");
@@ -98,6 +105,9 @@
 
 			msgview.appendChild(tag);
 		}
+		
+		/*CREATE MEMBER LIST*/
+
 		//scroll chat windows to view messages
 		msgview.scrollTop = msgview.scrollHeight - msgview.clientHeight;
 	}

@@ -24,7 +24,7 @@ function SendLoginRequest()
 			HandleLoginResponse(this.responseText);
 		}		
 	}
-	request.send("type=login&uname="+username+"&pword="+password);
+	request.send("type=login&uname="+username+"&password="+password);
 }
 
 function SendLogoutRequest()
