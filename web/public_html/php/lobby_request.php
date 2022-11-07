@@ -16,6 +16,7 @@
         $request = array();
         $request['type'] = 'lobby_add';
         $_SESSION['lobby_host'] = true;
+        $_SESSION['lobby_id'] = rand(0000,9999);
         return $client->send_request($request);
     }
 
