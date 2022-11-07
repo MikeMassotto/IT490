@@ -21,8 +21,10 @@ function SendLoginRequest()
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
 			console.log(this.responseText);
-			if(this.responseText == "true")
+			if(this.responseText != "Fail")
 			{
+				localStorage.setItem("username", username);
+				localStorage.setItem("user_id", this.responseText);
 				window.location.replace("lobby_home.html");
 			}
 		}		

@@ -66,12 +66,12 @@ function login($username, $password){
 		$_SESSION['userid'] = $response->{'id'};
 		$_SESSION['username'] = $username;
 
-		return "true";
+		return $_SESSION['userid'];
 
 	} 
 	else 
 	{
-		return "Username or password does not exist.";
+		return "Failed";
 	}
 }
 

@@ -14,7 +14,10 @@
         //This bullshit is so we can concat the userid to the request
         const queryString = window.location.search; 
         const urlParams = new URLSearchParams(queryString);
-        const userid = urlParams.get('user_id');
+        var userid = localStorage.getItem("user_id");
+        if(urlParams.get('user_id')){
+            userid = urlParams.get('user_id');
+        }
 
         request.onreadystatechange = function ()
         {
@@ -22,6 +25,7 @@
             if ((this.readyState == 4)&&(this.status == 200))
             {
                 sessionStorage.setItem(data_type, this.responseText);
+                console.log(this.responseText);
                 //replace_html("username", this.responseText);
                 return this.responseText;
             }
@@ -32,11 +36,11 @@
     //Sending a friend request
     function send_friend_req(){
 
-        username = get_user_data("username");
+        username = localStorage.getItem("username");
         friend_request = document.getElementById("friend_name").value;
 
         var request = new XMLHttpRequest();
-        request.open("POST","/php/user_request.php",true);
+        request.open("POST","php/user_request.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
         request.onreadystatechange= function ()
@@ -127,13 +131,15 @@
     //Function Calls
 
     var profile_info = get_user_data("all");
-    profile_info = sessionStorage.getItem("all");
+    profile_info = JSON.parse(sessionStorage.getItem("all"));
+
+    replace_html("username", profile_info[1]);
 
     var friends = get_user_data("friends");
     friends = sessionStorage.getItem("friends");
 
     var achievements = get_user_data("achievements");
-    achievements = sessionStorage.getItem("achievements");
+    achievements = JSON.parse(sessionStorage.getItem("achievements"));
 
     console.log(profile_info);
     console.log(friends);

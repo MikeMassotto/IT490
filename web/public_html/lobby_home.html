@@ -36,7 +36,11 @@
             if ((this.readyState == 4)&&(this.status == 200))
             {
                 console.log(this.responseText);
-                HandleLoginResponse(this.responseText);
+                if(this.responseText.length == 4){
+                    localStorage.setItem("lobby_id", this.responseText);
+                    console.log(localStorage.getItem("lobby_id"));
+                    window.location.replace("lobby_game.html");
+                }
             }		
         }
         request.send("type=create");

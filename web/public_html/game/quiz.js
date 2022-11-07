@@ -12,14 +12,15 @@ var round_count = 9;
 window.onload = function()
 {
     engine.start();
-    add_session_var_from_server("username");
-    add_session_var_from_server("lobby_id");
+    //add_session_var_from_server("username");
+    //add_session_var_from_server("lobby_id");
 }
 
 engine.init = function()
 {
     console.log("init");
     
+    console.log(localStorage.getItem("lobby_id"));
     //get_session_var("name");
 
     var request_t = new XMLHttpRequest();
@@ -97,7 +98,7 @@ function game_over()
         request.open("POST","network/request.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
     
-        request.send("type=update_user_stats&user_id=2&win=1&points=10");
+        request.send("type=update_user_stats&user_id=" + localStorage.getItem("user_id") + "&win=1&points=10");
 
         return;
     }
@@ -162,7 +163,7 @@ function start_quiz()
     "&solution=" + solution_index.toString());
     
     user_name = new Entity;
-    user_name.label.text = sessionStorage.getItem("username");
+    user_name.label.text = localStorage.getItem("username");
     user_name.position.x = 50;
     user_name.position.y = 50;
 

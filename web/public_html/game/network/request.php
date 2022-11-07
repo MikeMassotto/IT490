@@ -2,13 +2,11 @@
 //  error_reporting(E_ALL);
 //  ini_set('display_errors', 1);
 
-require_once('../../path.inc');
-require_once('../../get_host_info.inc');
-require_once('../../rabbitMQLib.inc');
+require_once('../../../path.inc');
+require_once('../../../get_host_info.inc');
+require_once('../../../rabbitMQLib.inc');
 
 session_start();
-$_SESSION["name"] = "bob";
-$_SESSION["lobby_id"] = "1234";
 //echo '{"reply":"12"}';
 //exit(0);
 

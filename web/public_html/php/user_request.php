@@ -26,7 +26,7 @@
       $request['type'] = "get_user_data";
       $request['user_id'] = $userid;
 
-      $response = $client ->send_request($request);
+      $response = json_decode($client->send_request($request));
       return $response;
    }
 
@@ -49,7 +49,7 @@
       $request = array();
       $request['type'] = "add_friend";
       $request['username'] = $username;
-      $request['friendUsername'] = $friend_name;
+      $request['friend_name'] = $friend_name;
 
       $response = $client ->send_request($request);
       return $response;
