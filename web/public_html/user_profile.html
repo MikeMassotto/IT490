@@ -29,6 +29,29 @@
         request.send("type="+data_type+"&user_id="+userid);
     }
 
+    //Sending a friend request
+    function send_friend_req(){
+
+        username = get_user_data("username");
+        friend_request = document.getElementById("friend_name").value;
+
+        var request = new XMLHttpRequest();
+        request.open("POST","/php/user_request.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+        request.onreadystatechange= function ()
+        {
+            
+            if ((this.readyState == 4)&&(this.status == 200))
+            {
+                console.log(this.responseText);
+                HandleLoginResponse(this.responseText);
+            }		
+        }
+        request.send("type=friend_req&username="+username+"&friend_name="+friend_request);
+
+    }
+
     //Replaces HTML Text with text sent in replace_text parameter
     function replace_html(id, replace_text)
     {
@@ -80,6 +103,13 @@
         <ul id="achievements"></ul>
     
         <h2>Friends</h2>
+
+        <!--Friend Requests-->
+        <form action="javascript:send_friend_req()">
+            <label for="friend_name">Username:</label><br>
+            <input type="text" id="friend_name" name="friend_username"><br>
+            <input type="submit" value="Send Friend Request">
+        </form>
 
         <ul id="friends_list"></ul>
 
