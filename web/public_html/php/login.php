@@ -11,7 +11,6 @@ require_once('../../rabbitMQLib.inc');
 
 echo "inside login.php";
 
-
 function get_dir(){
 
 	//https://www.positioniseverything.net/php-header-location/
@@ -58,22 +57,19 @@ function login($username, $password){
     $request = array();
     $request['type'] ='login';
     $request['username'] = $username;
-    $request['password'] = password_hash($password, PASSWORD_DEFAULT);
     $response = $client->send_request($request);
 
+	echo PHP_EOL . $response . PHP_EOL;
+	$response = json_decode($response);
+
 	//Password Verification
-	if(password_verify($password, $response)){
+	if(password_verify($password, $response->{'hash'})){
 
-		$_SESSION['username'] = 'username';
+		$_SESSION['userid'] = $response->{'id'};
+		$_SESSION['username'] = $username;
 
-		$request['type'] = 'get_account_id';
-		
-		$response = $client->send_request($request);
-		$_SESSION['userid'] = $response;
-
-		echo $_SESSION['userid'];
-
-		header("Location: http://"+get_dir()+"/lobby_home.html");
+		header("Location: ../lobby_home.html");
+		exit(0);
 
 	} 
 	else 
@@ -89,8 +85,12 @@ function new_user($username, $password){
     $request['type'] = 'new_user';
     $request['username'] = $username;
 	$request['password'] = password_hash($password, PASSWORD_DEFAULT);
+
 	$response = $client->send_request($request);
-	echo $response;
+
+	echo PHP_EOL . $response . PHP_EOL;
+	echo "se12nd";
+	exit(0);
 
 	if(strcmp($response, 'succ') == 0){
 
