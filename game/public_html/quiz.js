@@ -12,7 +12,8 @@ var round_count = 9;
 window.onload = function()
 {
     engine.start();
-    add_session_var_from_server("name");
+    add_session_var_from_server("username");
+    add_session_var_from_server("lobby_id");
 }
 
 engine.init = function()
@@ -161,7 +162,7 @@ function start_quiz()
     "&solution=" + solution_index.toString());
     
     user_name = new Entity;
-    user_name.label.text = sessionStorage.getItem("name");
+    user_name.label.text = sessionStorage.getItem("username");
     user_name.position.x = 50;
     user_name.position.y = 50;
 
