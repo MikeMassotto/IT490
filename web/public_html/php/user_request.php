@@ -30,6 +30,32 @@
       return $response;
    }
 
+   function get_username_from_id($userid){
+
+      $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+      $request = array();
+      $request['type'] = "get_username_from_id";
+      $request['user_id'] = $userid;
+
+      $response = $client ->send_request($request);
+      return $response;
+
+   }
+   
+   function friend_request($username, $friend_name)
+   {
+
+      $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+      $request = array();
+      $request['type'] = "add_friend";
+      $request['username'] = $username;
+      $request['friendUsername'] = $friend_name;
+
+      $response = $client ->send_request($request);
+      return $response;
+
+   }
+   
    function get_friends_list($userid)
    {
 
@@ -105,8 +131,16 @@
          $response = get_profile_info($request["user_id"]);
          break;
 
+      case "username":
+         $response = get_username_from_id($request["user_id"]);
+         break;
+
       case "friends_list":
          $response = get_friends_list($request["user_id"]);
+         break;
+
+      case "friend_req":
+         $response = friend_request($request["username"], $request["friend_name"]);
          break;
 
       case "achievements":

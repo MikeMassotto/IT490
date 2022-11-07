@@ -42,6 +42,36 @@
         request.send("type=create");
     }
 
+    function list_lobbies(){
+        var request = new XMLHttpRequest();
+        request.open("POST","/php/lobby_request.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+        request.onreadystatechange= function ()
+        {
+            
+            if ((this.readyState == 4)&&(this.status == 200))
+            {
+                console.log(this.responseText);
+                HandleLoginResponse(this.responseText);
+            }		
+        }
+        request.send("type=list");
+    }
+
+    //Populate a list marked by an id
+    function list_html(id, data_array)
+    {
+        var list = document.getElementById(id);
+        console.log(typeof(data_array));
+        for (var i = 0; i < data_array.length; i++)
+        {
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(data_array[i]));
+            list.appendChild(li);
+        }
+    }
+
 </script>
 
 <head>
@@ -82,6 +112,13 @@
 
     </main>
 
+    <aside>
+
+        <h2>Active Lobbies</h2>
+        <ul id="lobby_list"></ul>
+        
+    </aside>
+
     <footer>
 
     </footer>
@@ -90,6 +127,8 @@
 
 <script>
     //Function Calls
+    var active_lobbies = list_lobbies();
+    list_html("lobby_list", active_lobbies);
 </script>
 
 </html>

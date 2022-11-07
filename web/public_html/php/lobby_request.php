@@ -27,20 +27,29 @@
         return $client->send_request($request);
     }
 
+    function list_rooms(){
+        $client = new rabbitMQClient("../testRabbitMQ.ini","testserver");
+        $request = array();
+        $request['type'] = "get_lobbies";
+        return $client->send_request($request);
+    }
+
    $request = $_POST;
 
    //Switch statement handles all user requests from here
 
    switch ($request["type"]){
 
-    case "create":
-        $response = create_room();
-        break;
+        case "create":
+            $response = create_room();
+            break;
 
-    case "join":
-        $response = join_room($request["lobbyid"]);
-        break;
+        case "join":
+            $response = join_room($request["lobbyid"]);
+            break;
 
+        case "list":
+            $response = list_rooms();
    }
 
    echo json_encode($response);
