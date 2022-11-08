@@ -21,7 +21,7 @@ function SendLoginRequest()
 		if ((this.readyState == 4)&&(this.status == 200))
 		{
 			console.log(this.responseText);
-			if(this.responseText != "Fail")
+			if(this.responseText != "Failed")
 			{
 				localStorage.setItem("username", username);
 				localStorage.setItem("user_id", this.responseText);
@@ -37,6 +37,9 @@ function SendLogoutRequest()
 	var request = new XMLHttpRequest();
 	request.open("POST", "php/login.php", true);
 	request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+	localStorage.clear();
+	sessionStorage.clear();
 
 	request.onreadystatechange = function()
 	{

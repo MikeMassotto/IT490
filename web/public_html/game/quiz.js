@@ -14,6 +14,8 @@ var network_solution;
 
 var start_game = false;
 
+var points = 0;
+
 var player_count = 0; 
 
 var round_max = 10;
@@ -227,13 +229,13 @@ function main_menu()
         timer_main = new_timer();
         timer_main.position.x = 1200;
         timer_main.position.y = 50;
-        timer_main.nums.x = 10;
-        timer_main.label.text = 10;
+        timer_main.nums.x = 20;
+        timer_main.label.text = 20;
         timer_main.label.font = "64px serif"
 
         setTimeout(function() {
             start_quiz();
-        }, 10000)
+        }, 20000)
     }
 
     player_count++;
@@ -259,7 +261,7 @@ function game_over()
         request.open("POST","network/request.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
     
-        request.send("type=update_user_stats&user_id=" + localStorage.getItem("user_id") + "&win=1&points=10");
+        request.send("type=update_user_stats&user_id=" + localStorage.getItem("user_id") + "&win=1&points=" + points);
 
         return;
     }
@@ -275,6 +277,7 @@ function game_over()
     text.label.text =  "You were wrong.";
     if( correct ){
         text.label.text =  "Correct!";
+        points++;
     }
         text.position.x = 1280/2;
     text.position.y = 720/2;
@@ -386,7 +389,7 @@ function start_quiz()
     tags.position.y = 300;
 
     l1 = new Entity;
-    l1.label.text = game_list[random_nums[solution_index].toString()]["2"].replace("/" + game_list[random_nums[solution_index].toString()]["1"] + "/g", "___");
+    l1.label.text = game_list[random_nums[solution_index].toString()]["2"].replace(game_list[random_nums[solution_index].toString()]["1"], "___");
     l1.position.x = 800;
     l1.position.y = 400;
 
@@ -403,7 +406,7 @@ function start_quiz()
         btn_4.label.text = game_list[network_game4_string]["1"];
 
         tags.label.text = game_list[network_solution]["3"].replace("/,/g", ", ");
-        l1.label.text = game_list[network_solution]["2"].replace("/" + game_list[random_nums[solution_index].toString()]["1"] + "/g", "___");
+        l1.label.text = game_list[network_solution]["2"].replace(game_list[random_nums[solution_index].toString()]["1"], "___");
 
         solution_name = game_list[network_solution]["1"]
     }
