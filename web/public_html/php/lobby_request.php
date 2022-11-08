@@ -24,6 +24,7 @@ function join_room($lobbyid){
     $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
     $request = array();
     $_SESSION['lobby_host'] = false;
+    $_SESSION['lobby_id'] = $lobbyid;
     return $client->send_request($request);
 }
 

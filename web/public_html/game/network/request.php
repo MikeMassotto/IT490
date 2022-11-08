@@ -36,6 +36,17 @@ function update_user_stats($user_id, $win, $points)
 }
 //Switch statement handles all user requests from here
 
+function lobby_update_status( $lobby_id, $status )
+{
+    $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+    $request = array();
+    $request['type'] = 'lobby_update_status';
+    $request['lobby_id'] = $lobby_id;
+    $request['status'] = $status;
+
+    return $client->send_request($request);
+}
+
 if (!isset($_POST))
 {
 	$msg = "NO POST MESSAGE SET, POLITELY FUCK OFF";
@@ -55,6 +66,9 @@ switch ($request["type"])
         break;
     case "get_session_var":
         $response = get_session_var($request["var"]);
+        break;
+    case "lobby_update_status":
+        $response = lobby_update_status($request['lobby_id'], $request['status']);
         break;
 }
 echo json_encode($response);

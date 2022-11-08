@@ -18,10 +18,14 @@
             
             if ((this.readyState == 4)&&(this.status == 200))
             {
-                console.log(this.responseText);
+                //console.log(this.responseText);
                 HandleLoginResponse(this.responseText);
             }		
         }
+        localStorage.setItem("lobby_id", lobbyid);
+        localStorage.setItem("lobby_host", false);
+        
+        window.location.replace("lobby_game.html");
         request.send("type=join&lobbyid="+lobbyid);
     }
 
@@ -35,9 +39,10 @@
             
             if ((this.readyState == 4)&&(this.status == 200))
             {
-                console.log(this.responseText);
+                //console.log(this.responseText);
                 if(this.responseText.length == 4){
                     localStorage.setItem("lobby_id", this.responseText);
+                    localStorage.setItem("lobby_host", "true");
                     console.log(localStorage.getItem("lobby_id"));
                     window.location.replace("lobby_game.html");
                 }
@@ -56,8 +61,8 @@
             
             if ((this.readyState == 4)&&(this.status == 200))
             {
-                console.log(this.responseText);
-                HandleLoginResponse(this.responseText);
+                //console.log(this.responseText);
+                sessionStorage.setItem("lobbies", this.responseText);
             }		
         }
         request.send("type=list");
@@ -71,7 +76,13 @@
         for (var i = 0; i < data_array.length; i++)
         {
             var li = document.createElement("li");
-            li.appendChild(document.createTextNode(data_array[i]));
+            var text = data_array[i][0];
+            if(document.createTextNode(data_array[i][1] == '0')){
+                text = text + " | Pre-Game";
+            }else{
+                text = text + " | In Game";
+            }
+            li.appendChild(document.createTextNode( text ));
             list.appendChild(li);
         }
     }
@@ -131,7 +142,9 @@
 
 <script>
     //Function Calls
-    var active_lobbies = list_lobbies();
+    list_lobbies();
+    let active_lobbies = JSON.parse(sessionStorage.getItem("lobbies"));
+    console.log(active_lobbies);
     list_html("lobby_list", active_lobbies);
 </script>
 
