@@ -6,7 +6,7 @@ const Quiz = () => {
   const [quizState, dispatch] = useContext(QuizContext);
 
   return (
-    <div className="quiz">
+    <div className="quiz bg-gray-100 text-white text-sm font-bold py-1 px-1 md:py-2 md:px-4 rounded w-full">
       {quizState.showResults && (
         <div className="results">
           <div className="congratulations">Congratulations!</div>
@@ -19,30 +19,30 @@ const Quiz = () => {
           </div>
           <div
             onClick={() => dispatch({ type: "RESTART" })}
-            className="next-button"
+            className="next-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Restart
           </div>
         </div>
       )}
-      {!quizState.showResults && (
-        <div>
-          <div className="score">
-            Question {quizState.currentQuestionIndex + 1}/
-            {quizState.questions.length}
-          </div>
-          <Question />
-          {quizState.currentAnswer && (
-            <div
-              onClick={() => dispatch({ type: "NEXT_QUESTION" })}
-              className="next-button"
-            >
-              Next question
+        {!quizState.showResults && (
+          <div>
+            <div className="score text-black">
+              Question {quizState.currentQuestionIndex + 1}/
+              {quizState.questions.length}
             </div>
-          )}
-        </div>
-      )}
-    </div>
+            <Question />
+            {quizState.currentAnswer && (
+              <div
+                onClick={() => dispatch({ type: "NEXT_QUESTION" })}
+                className="next-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Next question
+              </div>
+            )}
+          </div>
+        )}
+      </div>
   );
 };
 

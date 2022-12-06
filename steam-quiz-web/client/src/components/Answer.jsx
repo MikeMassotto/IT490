@@ -17,8 +17,7 @@ const Answer = ({
         className={`answer ${correctAnswerClass} ${wrongAnswerClass} ${disabledClass}`}
         onClick={() => onSelectAnswer(answerText)}
       >
-        <div className="answer-letter">{letterMapping[index]}</div>
-        <div className="answer-text">{answerText}</div>
+        <div className="answer-text bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-2 rounded">{answerText}</div>
       </div>
     );
   };

@@ -6,9 +6,8 @@ const Question = () => {
   const [quizState, dispatch] = useContext(QuizContext);
   const currentQuestion = quizState.questions[quizState.currentQuestionIndex];
   return (
-    <div>
-      <div className="question">{currentQuestion.question}</div>
-      <div className="answers">
+    <div className="grid grid-cols-1 md:grid-cols-2">
+      <div className="answers p-6">
         {quizState.answers.map((answer, index) => (
           <Answer
             answerText={answer}
@@ -22,6 +21,8 @@ const Question = () => {
           />
         ))}
       </div>
+
+      <div className="question p-6 text-black">{currentQuestion.question}</div>
     </div>
   );
 };
