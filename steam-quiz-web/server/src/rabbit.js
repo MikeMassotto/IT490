@@ -2,7 +2,7 @@ import amqp from "amqplib";
 import { v4 as uuidv4 } from "uuid";
 import config from "./config.json" assert { type: 'json' };
 export async function send(queue, data) {
-  // amqp connect to 45.63.4.74 with the login "it490" and password "it490"
+  // amqp connection
   const conn = await amqp.connect(config);
 
   const channel = await conn.createChannel();
