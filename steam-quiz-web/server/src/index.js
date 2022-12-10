@@ -1,7 +1,12 @@
+import * as rabbit from './rabbit.js';
 import express from 'express';
 import cors from 'cors';
 import { StreamChat } from 'stream-chat';
 import bcrypt from 'bcrypt';
+
+rabbit.send("steamTagQueue", "ping").then((response)=>{
+  console.log(response)
+})
 
 const app = express();
 
