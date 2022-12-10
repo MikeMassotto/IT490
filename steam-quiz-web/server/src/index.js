@@ -3,10 +3,20 @@ import cors from 'cors';
 import { StreamChat } from 'stream-chat';
 import bcrypt from 'bcrypt';
 
+import * as rabbit from './rabbit.js';
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+var data = {
+type: "ping"
+};
+
+rabbit.send("steamTagQueue", data).then((response) => {
+  console.log(response);
+});
 
 const api_key = "pv5nh9adqmbd";
 const api_secret = "99udkqms5uteg7ccdac53cu4rq7wfbmwe3sgqp74q5hzszt3s5cz2jq7dqs664qa";

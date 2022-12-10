@@ -17,8 +17,6 @@ function App() {
             <Route path="/user/:user/" element={<div></div>} />
             <Route path="/game" element={<Game />} />
             <Route path="*" element={<div></div>} />
-
-            
           </Routes>
         </Router>
       </Layout>
