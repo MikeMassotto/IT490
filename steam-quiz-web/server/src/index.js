@@ -5,22 +5,25 @@ import bcrypt from 'bcrypt';
 
 import * as rabbit from './rabbit.js';
 
-
-rabbit.send("steamTagQueue", "ping").then((response)=>{
-  console.log(response)
-})
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+const password = bcrypt.hashSync("guest", bcrypt.genSaltSync(10));
+
 var data = {
-type: "ping"
+  type: "login",
+  username: "guest"
 };
 
+console.log(data)
 rabbit.send("steamTagQueue", data).then((response) => {
   console.log(response);
+  // Authenticate the user with bcrypt
+  if( bcrypt.compareSync("guest", response['hash']) ) {
+    console.log("Authenticated with ID: " + response['id']);
+  }
 });
 
 const api_key = "pv5nh9adqmbd";
