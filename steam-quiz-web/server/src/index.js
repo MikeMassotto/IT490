@@ -5,6 +5,11 @@ import bcrypt from 'bcrypt';
 
 import * as rabbit from './rabbit.js';
 
+
+rabbit.send("steamTagQueue", "ping").then((response)=>{
+  console.log(response)
+})
+
 const app = express();
 
 app.use(cors());
