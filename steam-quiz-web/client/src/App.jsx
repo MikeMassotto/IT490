@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "./components/Layout";
 import Register from "./components/Register";
 import Game from "./views/Game";
+import Home from "./views/Home";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -12,7 +13,7 @@ function App() {
       <Layout>
       <Router>
         <Routes>
-          <Route path="/" element={<div></div>} />
+          <Route path="/" element={<Home/>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/user/:user/" element={<div></div>} />
           <Route path="/game" element={<Game />} />
