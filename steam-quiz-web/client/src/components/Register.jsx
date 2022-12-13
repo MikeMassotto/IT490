@@ -6,6 +6,7 @@ function Register() {
     const cookies = new Cookies();
     const [user, setUser] = React.useState(null);
     const SignUp = () => {
+        console.log("Run login");
         Axios.post("http://localhost:3001/register", user).then(res => { 
             const { username, passwordHahsed } = res.data;
 
