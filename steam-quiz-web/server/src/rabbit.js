@@ -1,22 +1,25 @@
 import amqp from 'amqplib';
 import { v4 as uuidv4 } from 'uuid';
-import config from "./config.json"assert { type : 'json' };
+import config from "./config.json" assert { type : 'json' };  // Import the config file that holds the RabbitMQ connection details
 
 class RabbitMQClient {
   constructor(machine, server = 'rabbitMQ') {
+    // Assign the connection details from the config file to the instance variables
     this.BROKER_HOST = config.hostname;
     this.BROKER_PORT = config.port;
     this.USER = config.username;
     this.PASSWORD = config.password;
     this.VHOST = config.vhost;
-    this.exchangeType = config.exchangeType || 'topic';
-    this.autoDelete = false;
+    this.exchangeType = config.exchangeType || 'topic'; // Set the exchange type to 'topic' if it is not specified in the config
+    this.autoDelete = false; // Set the auto delete flag to false
     this.exchange = config.exchange;
     this.queue = config.queue;
   }
 
+  // The processResponse function is used to send a response message to a request
   async processResponse(response) {
     try {
+      // Connect to the RabbitMQ server using the connection details
       const conn = await amqp.connect({
         hostname: this.BROKER_HOST,
         port: this.BROKER_PORT,
@@ -25,20 +28,28 @@ class RabbitMQClient {
         vhost: this.VHOST,
       });
   
+      // Create a channel for sending messages
       const channel = await conn.createChannel();
+      
+      // Assert the exchange specified in the config file
       const exchange = await channel.assertExchange(this.exchange, this.exchangeType);
+      
+      // Assert the queue specified in the config file
       const connQueue = await channel.assertQueue(this.queue, { autoDelete: this.autoDelete });
       //connQueue.bind(exchange.exchange, this.routingKey);
   
+      // Publish the response message to the exchange with the specified routing key
       exchange.publish(JSON.stringify(response), this.routingKey);
-      conn.close();
+      conn.close(); // Close the connection when the message has been sent
     } catch (error) {
       console.error(error);
     }
   }
 
+  // The sendRequest function is used to send a request message and receive a response
   async sendRequest(request, responseExpected = true, routingKey = '*') {
     try {
+      // Connect to the RabbitMQ server using the connection details
       const conn = await amqp.connect({
         hostname: this.BROKER_HOST,
         port: this.BROKER_PORT,
