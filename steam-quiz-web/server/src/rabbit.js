@@ -132,8 +132,8 @@ export const RabbitTypes = {
   }
 }
 
-export const Rabbit = new RabbitMQClient();
+// export const Rabbit = new RabbitMQClient();
 
-await Rabbit.sendRequest({ type: 'ping'}).then((response) => {
-  console.log(response);
-});
+// await Rabbit.sendRequest({ type: 'ping'}).then((response) => {
+//   console.log(response);
+// });
