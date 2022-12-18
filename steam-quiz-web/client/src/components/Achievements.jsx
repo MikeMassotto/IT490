@@ -1,20 +1,37 @@
-import React from "react";
-import Axios from "axios";
+import { useState, useEffect } from "react";
 import { types as Rabbit } from "../util/rabbit";
+import axios from "axios";
 
-const Achievements = ({ username }) => {
+function Achievements({ username }) {
+  const [achievements, setAchievements] = useState([]);
 
-    data = {
-      username: username,
-      request: Rabbit.user.get_achievements,
-    };
+  useEffect(() => {
+    async function fetchData() {
+      const data = {
+        username: username,
+        request: Rabbit.user.get_acheivements,
+      };
 
-    Axios.post("http://localhost:3001/api/userRequest", data).then((res) => {
-      console.log(res.data);
-    });
+      const response = await axios.post(
+        "http://localhost:3001/api/userRequest",
+        data
+      );
+      setAchievements(response.data["achievements"]);
+    }
 
+    fetchData();
+  }, []);
 
-  return <div></div>;
-};
-  
+  return (
+    <div>
+      <b>{username}'s Achievements</b>
+      <ul>
+        {achievements.map((achi) => (
+          <li key={achi}>{achi}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export default Achievements;

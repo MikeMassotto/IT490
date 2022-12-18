@@ -11,6 +11,7 @@ const Profile = () => {
     return (
         <div>
             <FriendList username={user}/>
+            <Achievements username={user}/>
         </div>
     );
 
