@@ -3,6 +3,8 @@ import cors from 'cors';
 import { StreamChat } from 'stream-chat';
 import bcrypt from 'bcrypt';
 
+import './game.js'
+
 import * as rabbit from './rabbit.js';
 
 const app = express();
@@ -15,19 +17,12 @@ const api_secret = "99udkqms5uteg7ccdac53cu4rq7wfbmwe3sgqp74q5hzszt3s5cz2jq7dqs6
 
 const serverClient = StreamChat.getInstance(api_key, api_secret);
 
-const data = {
-  type: rabbit.types.user.get_username_from_id,
-  user_id: "45"
-};
-rabbit.send( "steamTagQueue", data ).then((response) => {
-  console.log(response);
-  });
 
 
 app.post("/register", async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    res.json({ username, hashedPassword });
+   // res.json({ username, hashedPassword });
 
     var data = {
       type: "new_user",
@@ -35,7 +30,7 @@ app.post("/register", async (req, res) => {
       password: password
     };
 
-    rabbit.send("steamTagQueue", data).then((response) => {
+    rabbit.send("testq", data).then((response) => {
       console.log(response);
       // Authenticate the user with bcrypt
       if( bcrypt.compareSync("guest", response['hash']) ) {
@@ -46,7 +41,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  res.json({ username, hashedPassword });
+  //res.json({ username, hashedPassword });
 
   var data = {
     type: 'login',

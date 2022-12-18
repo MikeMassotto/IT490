@@ -1,75 +1,98 @@
-import amqp from "amqplib";
-import {
-  v4 as uuidv4
-} from "uuid";
+import amqp from 'amqplib';
+import { v4 as uuidv4 } from 'uuid';
 import config from "./config.json"assert { type : 'json' };
-export async function send(queue, data) {
-  // amqp connection
-  const conn = await amqp.connect(config);
 
-  const channel = await conn.createChannel();
+class RabbitMQClient {
+  constructor(machine, server = 'rabbitMQ') {
+    this.BROKER_HOST = config.hostname;
+    this.BROKER_PORT = config.port;
+    this.USER = config.username;
+    this.PASSWORD = config.password;
+    this.VHOST = config.vhost;
+    this.exchangeType = config.exchangeType || 'topic';
+    this.autoDelete = false;
+    this.exchange = config.exchange;
+    this.queue = config.queue;
+  }
 
-  // create a queue for the request-response pattern
-  await channel.assertQueue("response_" + queue, {
-    durable: true
-  });
+  async processResponse(response) {
+    try {
+      const conn = await amqp.connect({
+        hostname: this.BROKER_HOST,
+        port: this.BROKER_PORT,
+        username: this.USER,
+        password: this.PASSWORD,
+        vhost: this.VHOST,
+      });
+  
+      const channel = await conn.createChannel();
+      const exchange = await channel.assertExchange(this.exchange, this.exchangeType);
+      const connQueue = await channel.assertQueue(this.queue, { autoDelete: this.autoDelete });
+      //connQueue.bind(exchange.exchange, this.routingKey);
+  
+      exchange.publish(JSON.stringify(response), this.routingKey);
+      conn.close();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  //channel.consume(queue, async (msg) => {
-  //  // get the request data
-  //  const request = JSON.parse(msg.content.toString());
-//
-  //  console.log("Server received:", request);
-  //  // process the request and generate a response
-  //  const response = {
-  //    data: "pong",
-  //  };
-//
-  //  // send the response back to the client
-  //  await channel.sendToQueue(
-  //    msg.properties.replyTo,
-  //    Buffer.from(JSON.stringify(response)), {
-  //      correlationId: msg.properties.correlationId,
-  //    }
-  //  );
-//
-  //  // acknowledge the request message
-  //  channel.ack(msg);
-  //});
-
-  const requestId = uuidv4();
-  console.log("Request ID:", requestId);
-  const request = data;
-
-  console.log(request)
-
-  // send the request message to the queue
-  channel.sendToQueue(queue, Buffer.from(JSON.stringify(request)), {
-    // specify a reply-to queue for the response
-    replyTo: "response_" + queue,
-
-    // set the correlation ID to the request ID
-    correlationId: requestId,
-    routingKey: "*"
-  });
-
-  return new Promise((resolve, reject) => {
-    // added a promise to return the response
-    channel.consume("response_" + queue, (msg) => {
-      console.log(msg.properties.correlationId + " | " + requestId);
-      if (msg.properties.correlationId === requestId) {
-        // get the response data
-        const response = JSON.parse(msg.content.toString('utf-8'));
-        // acknowledge the response message
-        channel.ack(msg);
-
-        // resolve the promise with the response data
-        resolve(response);
-      }
-    });
-  });
+  async sendRequest(request, responseExpected = true, routingKey = '*') {
+    try {
+      const conn = await amqp.connect({
+        hostname: this.BROKER_HOST,
+        port: this.BROKER_PORT,
+        username: this.USER,
+        password: this.PASSWORD,
+        vhost: this.VHOST,
+      });
+  
+      const channel = await conn.createChannel();
+      const exchange = await channel.assertExchange(this.exchange, this.exchangeType);
+  
+      // Create an instance of the AMQPQueue class
+      const connQueue = await channel.assertQueue(this.queue, { autoDelete: this.autoDelete });
+  
+      // Bind the queue to the exchange with the specified routing key
+      //channel.bind(exchange.exchange, routingKey);
+  
+      // Send the request and wait for the response
+      const correlationId = uuidv4();
+      const response = await new Promise((resolve, reject) => {
+        const options = {
+          correlationId,
+          replyTo: connQueue.queue,
+        };
+  
+        // Send the request
+        channel.publish(this.exchange, routingKey, Buffer.from(JSON.stringify(request)), options);
+  
+        if (!responseExpected) {
+          conn.close();
+          resolve();
+        }
+  
+        // Wait for the response
+        channel.consume("response_" + this.queue, (msg) => {
+          //console.log(msg);
+            if (msg.properties.correlationId === correlationId) {
+              resolve(JSON.parse(msg.content.toString()));
+              setImmediate(() => conn.close());
+            }
+          },
+          { noAck: true }
+        );
+      });
+  
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
 }
 
-export const types = {
+export const RabbitTypes = {
   user: {
     new_user: "new_user",
     login: "login",
@@ -97,3 +120,9 @@ export const types = {
     update_stats: "update_stats"
   }
 }
+
+export const Rabbit = new RabbitMQClient();
+
+await Rabbit.sendRequest({ type: 'ping'}).then((response) => {
+  console.log(response);
+});
