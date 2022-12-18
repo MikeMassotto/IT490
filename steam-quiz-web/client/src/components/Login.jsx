@@ -1,14 +1,24 @@
 import React from "react";
 import Axios from "axios";
+import SteamLoginButton from "./SteamButtonButton";
 
 const Login = () => {
   const [user, setUser] = React.useState(null);
-  const SendLoginReq = () => {
-    Axios.post("http://localhost:3001/register", user).then((res) => {
-      const { username, passwordHahsed } = res.data;
 
-      console.log(res.data);
-    });
+  const sendLoginReq = () => {
+    Axios.post('http://localhost:3001/login', user)
+      .then((res) => {
+        if (res.data.success) {
+          // Save the session information in the client's browser
+          window.localStorage.setItem('loggedIn', true);
+          window.localStorage.setItem('username', user.username);
+          window.localStorage.setItem('passwordHashed', user.passwordHashed);
+
+          console.log('Logged in successfully');
+        } else {
+          console.log('Error logging in');
+        }
+      });
   };
 
   return (
@@ -37,12 +47,13 @@ const Login = () => {
           }}
         />
         <button
-          onClick={SendLoginReq}
+          onClick={sendLoginReq}
           className="my-3 bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           type="submit"
         >
           Login
         </button>
+          <SteamLoginButton />
     </div>
   );
 };

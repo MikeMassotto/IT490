@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Socket } from "./../util/socket";
 // Initialize the Socket.io client
 const socket = Socket;
 
 const QuizLobby = () => {
+  // Redirect if the user is not logged in
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedIn = window.localStorage.getItem("loggedIn");
+
+    if (!loggedIn) {
+      // Redirect to the login page
+      navigate("/login");
+    }
+  }, []);
+
   // Set up state for the lobby ID and the player number
   const [lobbyId, setLobbyId] = useState("");
   const [playerNumber, setPlayerNumber] = useState(0);
@@ -22,12 +36,12 @@ const QuizLobby = () => {
   // Set up the game_code event listener
   useEffect(() => {
     socket.on("connect", (data) => {
-        console.log("I am connected!");
-        socket.io.emit("test", "Test Data!");
-    })
+      console.log("I am connected!");
+      socket.io.emit("test", "Test Data!");
+    });
 
     socket.on("disconnect", () => {
-        console.log("I've being disconnected");
+      console.log("I've being disconnected");
     });
 
     socket.on("game_code", (lobby) => {
@@ -35,22 +49,25 @@ const QuizLobby = () => {
       setNewLobby("");
     });
 
-  // Set up the start_game event listener
+    // Set up the start_game event listener
     socket.on("start_game", (question) => {
       setCurrentQuestion(question);
       setScore(0);
     });
 
-  // Set up the update_score event listener
+    // Set up the update_score event listener
     socket.on("update_score", (newScore) => {
       setScore(newScore);
     });
 
-    socket.on("next_question", function(data) {
+    socket.on("next_question", function (data) {
       console.log(data);
       const current = data.current_question;
       const question = data.questions[current];
-      const test = {question: question.description, answers: question.answers};
+      const test = {
+        question: question.description,
+        answers: question.answers,
+      };
       setCurrentQuestion(test);
     });
   }, []);
@@ -90,50 +107,73 @@ const QuizLobby = () => {
   };
 
   return (
-    <div>
-      {/* Form for creating a new game */}
-      <form onSubmit={createGame}>
-        <button type="submit">Create New Game</button>
-      </form>
-
-      {/* Form for joining an existing game */}
-      <form onSubmit={joinGame}>
-        <input
-          type="text"
-          value={joinLobby}
-          onChange={(e) => setJoinLobby(e.target.value)}
-        />
-        <button type="submit">Join Game</button>
-      </form>
-
-      {/* Display the lobby ID and player number */}
-      <div>Lobby ID: {lobbyId}</div>
-      <div>Player Number: {playerNumber}</div>
-
-      {/* Button for starting the game (only visible if the player has joined a lobby) */}
-      {lobbyId && <button onClick={startGame}>Start Game</button>}
-
+    <div className="grid grid-rows-2 md:grid-cols-2 items-center my-2 mx-3">
       {/* Display the current question or a waiting message */}
       {currentQuestion.question ? (
-        <div>{currentQuestion.question}</div>
+        <div>
+          {/* Display the player's score */}
+          <div>Score: {score}</div>
+          <div className="text-center">
+          {currentQuestion.question}
+          </div>
+        </div>
       ) : (
-        <div>Please wait for the game to start</div>
+        <div>
+          {" "}
+          {/* Form for creating a new game */}
+          <form onSubmit={createGame}>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Create New Game
+            </button>
+          </form>
+          {/* Form for joining an existing game */}
+          <form onSubmit={joinGame}>
+            <input
+              className="bg-gray-200 py-2 px-4 mx-2 my-2"
+              type="text"
+              value={joinLobby}
+              onChange={(e) => setJoinLobby(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Join Game
+            </button>
+          </form>
+          {/* Display the lobby ID and player number */}
+          <div>Lobby ID: {lobbyId}</div>
+          <div>Player Number: {playerNumber}</div>
+          {/* Button for starting the game (only visible if the player has joined a lobby) */}
+          {lobbyId && (
+            <button
+              onClick={startGame}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Start Game
+            </button>
+          )}
+        </div>
       )}
-      <div className="flex flex-col">
-      {/* Display the answer choices or a waiting message */}
-      {currentQuestion.answers.length > 0 ? (
-        currentQuestion.answers.map((answer, index) => (
-          <button key={index} onClick={() => submitAnswer(answer)}>
-            {answer}
-          </button>
-        ))
-      ) : (
-        <div>Please wait for the game to start</div>
-      )}
+      <div className="grid mx-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-1 2xl:grid-cols-2">
+        {/* Display the answer choices or a waiting message */}
+        {currentQuestion.answers.length > 0 ? (
+          currentQuestion.answers.map((answer, index) => (
+            <button
+              key={index}
+              onClick={() => submitAnswer(answer)}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-2 w-64 h-24 py-2 px-4 rounded"
+            >
+              {answer}
+            </button>
+          ))
+        ) : (
+          <div></div>
+        )}
       </div>
-
-      {/* Display the player's score */}
-      <div>Score: {score}</div>
     </div>
   );
 };
