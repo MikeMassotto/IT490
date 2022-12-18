@@ -16,18 +16,21 @@ function FriendList({ username }) {
         "http://localhost:3001/api/userRequest",
         data
       );
-      setFriends(response.data['friends']);
+      setFriends(response.data["friends"]);
     }
 
     fetchData();
   }, []);
 
   return (
-    <ul>
-      {friends.map((friend) => (
-        <li key={friend}>{friend}</li>
-      ))}
-    </ul>
+    <div>
+      <b>{username}'s Friends</b>
+      <ul>
+        {friends.map((friend) => (
+          <li key={friend}>{friend}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

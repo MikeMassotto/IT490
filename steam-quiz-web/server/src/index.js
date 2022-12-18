@@ -145,7 +145,8 @@ app.post("/api/userRequest", async (req, res) => {
   const { username, request } = req.body;
   console.log(req.body);
   res.json({
-    friends: ["friend1", "friend2", "friend3", "friend4", "friend5"]
+    friends: ["friend1", "friend2", "friend3", "friend4", "friend5"],
+    achievements: ["ach1", "ach2", "ach3", "ach4", "ach5"]
   });
 });
 
