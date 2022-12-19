@@ -1,5 +1,6 @@
 import React from "react";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 import SteamLoginButton from "./SteamButtonButton";
 
 const Login = () => {
@@ -53,7 +54,15 @@ const Login = () => {
         >
           Login
         </button>
-          <SteamLoginButton />
+        <div className="text-center">
+          <div className="hover:text-blue-700">
+            <SteamLoginButton />
+          </div>
+          <div className="hover:text-blue-700">
+            <Link to="/Register">Sign Up</Link>
+          </div>
+          
+        </div>
     </div>
   );
 };

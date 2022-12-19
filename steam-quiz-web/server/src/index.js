@@ -6,8 +6,8 @@ import cors from "cors";
 import { StreamChat } from "stream-chat";
 import bcrypt from "bcrypt";
 
-import "./game.js";
-import { Rabbit } from "./rabbit.js";
+// import "./game.js";
+// import { Rabbit } from "./rabbit.js";
 
 var SteamStrategy = passprtSteam.Strategy;
 
@@ -83,52 +83,52 @@ app.get(
   }
 );
 
-app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  // res.json({ username, hashedPassword });
+// app.post("/register", async (req, res) => {
+//   const { username, password } = req.body;
+//   const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+//   // res.json({ username, hashedPassword });
 
-  var data = {
-    type: "new_user",
-    username: username,
-    password: hashedPassword,
-  };
+//   var data = {
+//     type: "new_user",
+//     username: username,
+//     password: hashedPassword,
+//   };
 
-  Rabbit.sendRequest(data).then((response) => {
-    console.log(response);
-    if (response == "succ") {
-      res.json({ username, status: "success" });
-    }
-  });
-});
+//   Rabbit.sendRequest(data).then((response) => {
+//     console.log(response);
+//     if (response == "succ") {
+//       res.json({ username, status: "success" });
+//     }
+//   });
+// });
 
-app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  //res.json({ username, hashedPassword });
+// app.post("/login", async (req, res) => {
+//   const { username, password } = req.body;
+//   //res.json({ username, hashedPassword });
 
-  var data = {
-    type: "login",
-    username: username,
-  };
+//   var data = {
+//     type: "login",
+//     username: username,
+//   };
 
-  Rabbit.sendRequest(data).then((response) => {
-    console.log(Object.entries(response));
-    if (response["hash"] == null) {
-      res.json({ success: false });
-      return;
-    }
+//   Rabbit.sendRequest(data).then((response) => {
+//     console.log(Object.entries(response));
+//     if (response["hash"] == null) {
+//       res.json({ success: false });
+//       return;
+//     }
 
-    if (bcrypt.compareSync(password, response["hash"])) {
-      console.log("Authenticated with ID: " + response["id"]);
-      req.session.loggedIn = true;
-      req.session.username = username;
-      req.session.password = password;
-      res.json({ success: true, username, id: response["id"] });
-    } else {
-      res.json({ success: false });
-    }
-  });
-});
+//     if (bcrypt.compareSync(password, response["hash"])) {
+//       console.log("Authenticated with ID: " + response["id"]);
+//       req.session.loggedIn = true;
+//       req.session.username = username;
+//       req.session.password = password;
+//       res.json({ success: true, username, id: response["id"] });
+//     } else {
+//       res.json({ success: false });
+//     }
+//   });
+// });
 
 app.get("/game", async (req, res) => {
   if (req.session.loggedIn) {
@@ -139,6 +139,15 @@ app.get("/game", async (req, res) => {
     // The user is not logged in, so redirect them to the login page
     res.redirect("/login");
   }
+});
+
+app.post("/api/userRequest", async (req, res) => {
+  const { request, username } = req.body;
+  console.log(req.body);
+  res.json({
+    friends: ["friend1", "friend2", "friend3", "friend4", "friend5"],
+    achievements: ["ach1", "ach2", "ach3", "ach4", "ach5"]
+  });
 });
 
 app.listen(3001, () => {

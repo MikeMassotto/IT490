@@ -5,6 +5,8 @@ import Game from "./views/Game";
 import Home from "./views/Home";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Profile from "./views/Profile";
+import NoMatch from "./views/NoMatch";
 
 function App() {
   return (
@@ -14,9 +16,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/register" element={<Register/>} />
-          <Route path="/user/:user/" element={<div></div>} />
+          <Route path="/user/:user/" element={<Profile/>} />
           <Route path="/game" element={<Game />} />
-          <Route path="*" element={<div></div>} />
+          <Route path="*" element={<NoMatch/>} />
         </Routes>
       </Router>
       </Layout>
