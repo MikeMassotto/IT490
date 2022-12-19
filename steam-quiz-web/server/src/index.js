@@ -142,7 +142,7 @@ app.get("/game", async (req, res) => {
 });
 
 app.post("/api/userRequest", async (req, res) => {
-  const { username, request } = req.body;
+  const { request, username } = req.body;
   console.log(req.body);
   res.json({
     friends: ["friend1", "friend2", "friend3", "friend4", "friend5"],
