@@ -8,8 +8,8 @@ function FriendList({ username }) {
   useEffect(() => {
     async function fetchData() {
       const data = {
-        username: username,
         request: Rabbit.user.get_friends,
+        username: username,
       };
 
       const response = await axios.post(

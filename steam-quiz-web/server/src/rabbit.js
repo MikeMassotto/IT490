@@ -112,7 +112,7 @@ export const RabbitTypes = {
     get_username_from_id: "get_username_from_id",
     get_account_id: "get_account_id",
     add_friend: "add_friend",
-    add_acheivement: "add_acheivement",
+    add_acheivement: "add_achievement",
     get_acheivements: "get_acheivements",
     user_update_achievements_public: "user_update_achievements_public",
     user_update_friends_public: "user_update_friends_public",

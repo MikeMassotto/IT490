@@ -8,8 +8,8 @@ function Achievements({ username }) {
   useEffect(() => {
     async function fetchData() {
       const data = {
+        request: Rabbit.user.get_achievements,
         username: username,
-        request: Rabbit.user.get_acheivements,
       };
 
       const response = await axios.post(
