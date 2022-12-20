@@ -1,7 +1,7 @@
 import React from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
-import SteamLoginButton from "./SteamButtonButton";
+import SteamLoginButton from "./SteamLoginButton";
 
 const Login = () => {
   const [user, setUser] = React.useState(null);
