@@ -2,7 +2,6 @@ import React from "react";
 import { types as Rabbit } from "../util/rabbit";
 import Axios from "axios";
 import Select from 'react-select';
-import { TagInput } from 'reactjs-tag-input';
 
 const GamePackForm = ({username}) => {
   const [pack_name, setPack] = React.useState(null);
