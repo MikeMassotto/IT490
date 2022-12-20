@@ -15,20 +15,19 @@ const Profile = () => {
       </div>
       <div className="grid w-screen grid-cols-3">
         <div>
-          <FriendList username={user} />
-          <div>
+        <div>
             {user == window.localStorage.getItem("username") ? (
               <FriendForm />
             ) : (
               <div></div>
             )}
           </div>
+          <FriendList username={user} />
         </div>
         <div>
           <Achievements username={user} />
         </div>
         <div>
-          <GamePacks username={user} />
           <div>
             {user == window.localStorage.getItem("username") ? (
               <GamePackForm />
@@ -36,6 +35,7 @@ const Profile = () => {
               <div></div>
             )}
           </div>
+          <GamePacks username={user} />
         </div>
       </div>
     </div>
